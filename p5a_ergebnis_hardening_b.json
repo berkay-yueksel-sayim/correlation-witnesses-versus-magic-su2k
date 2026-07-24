@@ -1,0 +1,42 @@
+{
+  "basis": "log2",
+  "stabilizer_input_lock_maxabs": 1.601713251907458e-15,
+  "random_control": 0.9818915867914343,
+  "rows_b": [
+    {
+      "k": 2,
+      "dim": 4,
+      "maxMana": null,
+      "orbit": 0,
+      "note": "dim!=5"
+    },
+    {
+      "k": 3,
+      "dim": 5,
+      "maxMana": 1.0623208978340062,
+      "orbit": 6000,
+      "note": "orbit"
+    },
+    {
+      "k": 4,
+      "dim": 5,
+      "maxMana": 1.032828714084391,
+      "orbit": 2007,
+      "note": "orbit"
+    },
+    {
+      "k": 5,
+      "dim": 5,
+      "maxMana": 1.0746179488528338,
+      "orbit": 6000,
+      "note": "orbit"
+    },
+    {
+      "k": 8,
+      "dim": 5,
+      "maxMana": 0.9707982460644887,
+      "orbit": 2004,
+      "note": "orbit"
+    }
+  ]
+}

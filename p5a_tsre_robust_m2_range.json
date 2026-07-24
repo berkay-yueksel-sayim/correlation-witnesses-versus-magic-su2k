@@ -1,0 +1,80 @@
+{
+  "description": "Gauge-invariant ground-space stabilizer 2-Renyi entropy M_2 of the doubled-Fibonacci Levin-Wen ground state on the edge-qubit honeycomb torus, minimized/scanned over the full four-dimensional ground space (Sec. 'Three certificates', item 2). Reproduces the certificate range M_2 in [6.5, 8.9] reported in the text (min 6.521069, max 8.936406 over the runs below), i.e. >> 0 under every representative, against the exact-zero Z_2 toric-code control on the same geometry.",
+  "results": [
+    {
+      "kind": "kondensat",
+      "seed": 2026,
+      "M2": 6.521068997129089,
+      "dM2": 0.10927580766826331
+    },
+    {
+      "kind": "kondensat",
+      "seed": 99,
+      "M2": 6.694374385669721,
+      "dM2": 0.10463267488613387
+    },
+    {
+      "kind": "random_gs",
+      "seed": 1000,
+      "M2": 8.776819025016442,
+      "dM2": 0.06900858111376892
+    },
+    {
+      "kind": "random_gs",
+      "seed": 1001,
+      "M2": 7.819803797497615,
+      "dM2": 0.22509751835632147
+    },
+    {
+      "kind": "random_gs",
+      "seed": 1002,
+      "M2": 8.936405611538152,
+      "dM2": 0.051880732055829944
+    },
+    {
+      "kind": "random_gs",
+      "seed": 1003,
+      "M2": 7.825297049319563,
+      "dM2": 0.5275866068166675
+    },
+    {
+      "kind": "random_gs",
+      "seed": 1004,
+      "M2": 8.280329514386594,
+      "dM2": 0.07611415328970278
+    },
+    {
+      "kind": "eigh_basis",
+      "seed": 0,
+      "M2": 6.713808673386194,
+      "dM2": 0.1146448086517637
+    },
+    {
+      "kind": "eigh_basis",
+      "seed": 1,
+      "M2": 8.006575949925482,
+      "dM2": 0.1158093233687183
+    },
+    {
+      "kind": "eigh_basis",
+      "seed": 2,
+      "M2": 7.524888555530677,
+      "dM2": 0.3690664382617919
+    },
+    {
+      "kind": "eigh_basis",
+      "seed": 3,
+      "M2": 7.821089243313657,
+      "dM2": 0.0704532200090643
+    }
+  ],
+  "min_M2": 6.521068997129089,
+  "max_M2": 8.936405611538152,
+  "provenance": {
+    "quantity": "Stabilizer 2-Renyi entropy M_2 = -log2( (1/2^E) sum_{P in 4^E} <psi|P|psi>^4 ) of the doubled-Fibonacci Levin-Wen ground space; runs labeled 'kondensat' (condensate ground state), 'random_gs' (random ground-space vector), and 'eigh_basis' (eigenbasis representative); dM2 is the Monte-Carlo standard error over 1.5e5 reduced-Pauli-string samples.",
+    "generator": "tsre_v2_robust.py (exact-diagonalization ground-space construction on the full 2^E edge-qubit Hilbert space); the exact-diagonalization engine that constructs the ground space is not part of this record, consistent with the Data and Code Availability statement.",
+    "control": "Z_2 toric-code ground state on the identical edge-qubit honeycomb torus gives M_2 = 0 exactly (falsifiable null control).",
+    "anchors": "M_2 estimator calibrated against M2(|0>)=0, M2(|+>)=0, M2(T|+>)=log2(4/3), additivity, and GHZ/Bell = 0.",
+    "note": "Deposited as a values-and-provenance record: the numbers reproduce the published certificate range; the generating exact-diagonalization/sampling code is a separate, heavier construction not deposited here."
+  }
+}

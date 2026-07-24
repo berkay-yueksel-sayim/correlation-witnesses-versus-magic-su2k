@@ -1,0 +1,22 @@
+{
+  "description": "Lattice-extracted vacuum column of the doubled-Fibonacci modular S-matrix, used as a genuinely independent second route for the Korbany mutual-information witness H (Sec. 'Three certificates', item 1). The values |S_{0a}|^2 are the normalized topological-sector weights read off the extracted S; their Shannon entropy reproduces the analytic H=1.700979 to the lattice-extraction residual.",
+  "lattice_vacuum_column_abs2": [
+    0.19999999999992923,
+    0.20000000001516643,
+    0.5236067977360916,
+    0.07639320224898706
+  ],
+  "H_lattice": 1.700979250222278,
+  "H_analytic": 1.700979250204323,
+  "abs_delta": 1.7954970843447882e-11,
+  "provenance": {
+    "quantity": "Full signed modular S and T of doubled Fibonacci, extracted from a 3x3 lattice via the C3 (rotation) channel (Li-Mong 2203.04329 V.1)",
+    "extractor": "extract_c3.extract (vacuum-row-positivity constraint S_{v,a}=d_a S_{v,v}>0; extract() receives only measured Wilson-loop and C3-rotation matrices; no F/R symbols, no analytic S/T, no doubled-Fibonacci quantum dimensions enter the extraction)",
+    "center": "(0,0)",
+    "lattice_input_md5": {
+      "V_gs_3x3.npy": "4512a6ea580f76fb3bf7e44d9d195e9f",
+      "Mgs_j_3x3.npy": "899655e2cef95d44f522d44a20714b06"
+    },
+    "note": "Vacuum column identified intrinsically as the unique all-positive column of the extracted S (S_{0a}=d_a/D>0), without theory labeling. The lattice extraction is an independent data source from the analytic quantum dimensions d=(1,phi,phi,phi^2)."
+  }
+}

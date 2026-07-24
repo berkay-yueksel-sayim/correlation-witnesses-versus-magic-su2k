@@ -1,0 +1,14 @@
+{
+  "null_anchor_Z2": 2.0,
+  "pos_anchor_toricT": 0.6008760366928562,
+  "H_dfib_quantumdims": 1.700979250204323,
+  "H_dfib_verifiedS": 1.700979250204323,
+  "agreement": 0.0,
+  "certificate": true,
+  "weights_dfib": [
+    0.07639320225002103,
+    0.2,
+    0.2,
+    0.523606797749979
+  ]
+}

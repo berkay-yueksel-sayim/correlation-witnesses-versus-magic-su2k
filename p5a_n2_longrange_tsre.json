@@ -1,0 +1,77 @@
+{
+  "seed": 2026,
+  "phi": 1.618033988749895,
+  "note": "v2 Hauptthread-Fix: Sampler + kanonische Zustaende",
+  "anchors": {
+    "M2(|0>)": -0.0,
+    "M2(|+>)": -1.2813706015259665e-15,
+    "M2(T|+>)": 0.4150374992788417,
+    "log2(4/3)": 0.41503749927884376,
+    "M2(T+ (x) T+)": 0.8300749985576865,
+    "2*log2(4/3)": 0.8300749985576875,
+    "M2(GHZ3)": -1.2813706015259665e-15,
+    "M2(Bell)": -1.2813706015259665e-15
+  },
+  "E": 12,
+  "fib": {
+    "info": {
+      "E": 12,
+      "full_dim": 4096,
+      "sub_dim": 175,
+      "E0": -4.000000000000002,
+      "GSD": 4,
+      "gap": 0.9999999999999978,
+      "bp_dev": 3.0531133177191805e-16,
+      "build_s": 0.7118533999998817
+    },
+    "canonical": {
+      "bp_dev": 2.7755575615628914e-17,
+      "leak_qv": 0.0,
+      "overlap_groundspace": 1.0000000000000007,
+      "norm_from_vacuum": 0.10803630269509057
+    },
+    "m2": {
+      "M2": 6.393326203504384,
+      "dM2": 0.13234427941302357,
+      "nsamp": 150000,
+      "arg": 0.011896440605845434
+    },
+    "discriminator": {
+      "frac_in_01": 0.5421,
+      "max_noninteger": 0.23108350559986543,
+      "n": 20000,
+      "mean_abs": 0.0068840922473855795
+    }
+  },
+  "toric": {
+    "canonical": {
+      "av_dev": 0.0,
+      "bp_dev": 0.0,
+      "support": 128
+    },
+    "m2": {
+      "M2": 0.10714013390762737,
+      "dM2": 0.2473929404086384,
+      "nsamp": 150000,
+      "arg": 0.9284266666666674
+    },
+    "discriminator": {
+      "frac_in_01": 1.0,
+      "max_noninteger": 0.0,
+      "n": 20000,
+      "mean_abs": 0.00035000000000000016
+    }
+  },
+  "locks": {
+    "product_state_zero": -0.0,
+    "known_magic_state": 0.4150374992788417,
+    "toric_stabilizer_zero": 0.10714013390762737,
+    "toric_stab_frac": 1.0,
+    "groundstate_genuine": {
+      "GSD": 4,
+      "overlap": 1.0000000000000007
+    }
+  },
+  "headline_M2_fib": 6.393326203504384,
+  "toric_m2_note": "toric.m2.M2 (~0.107) is a positively-biased finite-sample Monte Carlo estimate, NOT the true value. The true toric-code stabilizer 2-Renyi entropy is 0 exactly (a stabilizer ground state has no nonstabilizerness). This is certified in this same JSON by toric.discriminator: max_noninteger=0.0 and frac_in_01=1.0, i.e. every sampled Pauli expectation value lies exactly in {0,+-1}, the stabilizer signature. The paper cites the exact value M_2(Toric)=0. The ~0.107 is the known positive bias floor of the finite-sample M_2 estimator near zero, not a residual nonstabilizerness."
+}
