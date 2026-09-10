@@ -4,36 +4,36 @@
   "rows": [
     {
       "k": 4,
-      "typ": "endl.",
+      "type": "finite",
       "maxKCBS": 2.059495281782535,
-      "contextual": "JA (>2)",
+      "contextual": "YES (>2)",
       "maxMana": 0.736965594166207,
       "Mana_at_KCBSmax": 0.5288803691341103,
       "corr": -0.1933303332028003
     },
     {
       "k": 8,
-      "typ": "dicht",
+      "type": "dense",
       "maxKCBS": 2.2344069029961524,
-      "contextual": "JA (>2)",
+      "contextual": "YES (>2)",
       "maxMana": 0.7324744796997246,
       "Mana_at_KCBSmax": 0.6923571581992097,
       "corr": -0.012809049820532619
     },
     {
       "k": 3,
-      "typ": "dicht",
+      "type": "dense",
       "maxKCBS": 2.216541175790401,
-      "contextual": "JA (>2)",
+      "contextual": "YES (>2)",
       "maxMana": 0.73497330704149,
       "Mana_at_KCBSmax": 0.6782763481251429,
       "corr": -0.027399548238682018
     },
     {
       "k": 5,
-      "typ": "dicht",
+      "type": "dense",
       "maxKCBS": 2.227858830188959,
-      "contextual": "JA (>2)",
+      "contextual": "YES (>2)",
       "maxMana": 0.7349598145793805,
       "Mana_at_KCBSmax": 0.6853438412780943,
       "corr": -0.07149031489125535

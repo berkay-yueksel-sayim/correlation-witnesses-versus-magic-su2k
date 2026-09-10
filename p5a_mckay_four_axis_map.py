@@ -1,11 +1,11 @@
 """
-T4 — Vier-Achsen-k-Karte (Konsolidierung), 2026-06-24, Seed 2026.
-Fuehrt A/B-leicht/N1/T3 in EINER k-aufgeloesten Karte zusammen + 2 neue Rechnungen:
-  (B-CURVE) volle RoM/geom-Kurve k=2..50 + k->inf-Limes.
-  (B-FLOW)  Magic-Trajektorie unter sukzessivem Braiding: McKay-Endlichkeit (2O/2T/2I) als
-            DISKRIMINATOR — endliche Gruppe (k=2,4,8) -> beschraenkt/periodisch; dichte k -> fuellt Plateau.
-  (B-MAP)   Dissoziations-Karte: Magic(M2/RoM/geom) · Witness(Octahedron) · LGI(K3) · Gate-Magic(M^A, aus r6).
-Verifizierte Single-Qubit-Engine (engine.py r1 Konventionen). Eigene Herleitung.
+T4 — four-axis k-map (consolidation), 2026-06-24, seed 2026.
+Brings A/B-light/N1/T3 together in ONE k-resolved map + 2 new computations:
+  (B-CURVE) full RoM/geom curve k=2..50 + k->inf limit.
+  (B-FLOW)  magic trajectory under successive braiding: McKay finiteness (2O/2T/2I) as the
+            DISCRIMINATOR — finite group (k=2,4,8) -> bounded/periodic; dense k -> fills the plateau.
+  (B-MAP)   dissociation map: magic(M2/RoM/geom) · witness(octahedron) · LGI(K3) · gate magic(M^A, from r6).
+Verified single-qubit engine (engine.py r1 conventions). Own derivation.
 """
 import numpy as np
 np.random.seed(2026)
@@ -43,10 +43,10 @@ def geom(psi):
     psi=psi/np.linalg.norm(psi); return 1-max(abs(np.vdot(s,psi))**2 for s in STAB)
 
 def orbit(k):
-    """Gruppen-Elemente (endlich) oder Sampling (dicht). Rueckgabe: Liste U, dense-Flag."""
+    """Group elements (finite) or sampling (dense). Returns: list U, dense flag."""
     gens=braid_gens(k)
     els,capped=group(gens)
-    if capped:  # dicht -> sample
+    if capped:  # dense -> sample
         els=[]
         for _ in range(4000):
             U=I2.copy()
@@ -64,37 +64,37 @@ def max_measures(k):
     return mM2,mRoM,mGeom,wit,dense,order
 
 def K3(k):
-    """LGI K3 = max ueber Gruppe von 2*C(B)-C(B^2), C(U)=zz-Komponente von SO(3)-R(U). Luders-Bound 3/2."""
+    """LGI K3 = max over the group of 2*C(B)-C(B^2), C(U)=zz component of SO(3)-R(U). Luders bound 3/2."""
     els,dense,_=orbit(k)
     best=-9
     for B in els:
         RB=to_SO3(B); RB2=to_SO3(B@B); best=max(best,2*RB[2,2]-RB2[2,2])
     return best
 
-# ---- ANKER / LOCKS ----
-print("="*78); print("T4 — VIER-ACHSEN-k-KARTE (Magic · Witness · LGI · Gate)")
+# ---- ANCHORS / LOCKS ----
+print("="*78); print("T4 — FOUR-AXIS k-MAP (magic · witness · LGI · gate)")
 print("="*78)
 m2_2,rom_2,g_2,w_2,_,ord2=max_measures(2)
-assert m2_2<1e-9 and rom_2<1.0+1e-6, f"k=2-Clifford-Lock verletzt: M2={m2_2}, RoM={rom_2}"
+assert m2_2<1e-9 and rom_2<1.0+1e-6, f"k=2 Clifford lock violated: M2={m2_2}, RoM={rom_2}"
 print(f"[LOCK] k=2: M2={m2_2:.2e}(=0) RoM={rom_2:.4f}(=1 Oktaeder-Ecke) geom={g_2:.2e}(=0)  |group|={ord2}(2O=24)  OK")
-print(f"[ANKER] Single-Qubit-Magic-Max: M2_max=log2(3/2)={np.log2(1.5):.4f}  RoM_max=sqrt(3)={np.sqrt(3):.4f}  (T-Richtung r=(1,1,1)/sqrt3)")
+print(f"[ANCHOR] single-qubit magic max: M2_max=log2(3/2)={np.log2(1.5):.4f}  RoM_max=sqrt(3)={np.sqrt(3):.4f}  (T direction r=(1,1,1)/sqrt3)")
 
-# ---- B-CURVE: volle Kurve + Limes ----
-print("\n[B-CURVE] Magic-Maße vs k (max ueber Braid-Orbit) + k->inf-Limes:")
-print(f"  {'k':>3} {'M2':>7} {'RoM':>7} {'geom':>7} {'|grp|':>7} {'dicht?':>7}")
+# ---- B-CURVE: full curve + limit ----
+print("\n[B-CURVE] magic measures vs k (max over the braid orbit) + k->inf limit:")
+print(f"  {'k':>3} {'M2':>7} {'RoM':>7} {'geom':>7} {'|grp|':>7} {'dense?':>7}")
 curve=[]
 for k in [2,3,4,5,6,7,8,9,10,12,16,20,50]:
     mM2,mRoM,mGeom,wit,dense,order=max_measures(k)
     curve.append((k,mM2,mRoM,mGeom,order,dense))
-    print(f"  {k:>3} {mM2:>7.4f} {mRoM:>7.4f} {mGeom:>7.4f} {str(order):>7} {'dicht' if dense else 'endl.':>7}")
-# Limes-Check: dichte k -> globaler Single-Qubit-Max
+    print(f"  {k:>3} {mM2:>7.4f} {mRoM:>7.4f} {mGeom:>7.4f} {str(order):>7} {'dense' if dense else 'finite':>7}")
+# limit check: dense k -> global single-qubit max
 dense_m2=[m for (k,m,_,_,_,d) in curve if d];
-print(f"  => Limes (dichte k): M2->{np.mean(dense_m2):.4f} ~ log2(3/2)={np.log2(1.5):.4f} (globaler 1q-Magic-Max; dichter Braid fuellt SU(2))")
+print(f"  => limit (dense k): M2->{np.mean(dense_m2):.4f} ~ log2(3/2)={np.log2(1.5):.4f} (global 1q magic max; a dense braid fills SU(2))")
 
-# ---- B-FLOW: Magic-Trajektorie + McKay-Diskriminator ----
-print("\n[B-FLOW] Magic-Trajektorie unter sukzessivem Braiding (McKay-Endlichkeit = Diskriminator):")
-print("  endliche Gruppe (k=2,4,8) -> Magic beschraenkt durch Gruppen-Max; dichte k -> fuellt zum Plateau.")
-print(f"  {'k':>3} {'Typ':>10} {'|grp|':>7} {'traj-max(L<=30)':>16} {'grp-max':>9} {'beschraenkt?':>13}")
+# ---- B-FLOW: magic trajectory + McKay discriminator ----
+print("\n[B-FLOW] magic trajectory under successive braiding (McKay finiteness = discriminator):")
+print("  finite group (k=2,4,8) -> magic bounded by the group max; dense k -> fills up to the plateau.")
+print(f"  {'k':>3} {'Type':>10} {'|grp|':>7} {'traj-max(L<=30)':>16} {'grp-max':>9} {'bounded?':>13}")
 for k in [2,4,8,3,5]:
     gens=braid_gens(k)
     els,dense,order=orbit(k)
@@ -104,38 +104,40 @@ for k in [2,4,8,3,5]:
         U=I2.copy()
         for _ in range(np.random.randint(1,31)): U=gens[np.random.randint(2)]@U
         for s in STAB: tmax=max(tmax,M2(U@s))
-    typ='2O/2T/2I' if not dense else 'dicht'
-    bounded = 'JA (=grp-max)' if not dense and abs(tmax-grpmax)<1e-6 else ('fuellt' if dense else f'{tmax:.3f}')
-    print(f"  {k:>3} {typ:>10} {str(order):>7} {tmax:>16.4f} {grpmax:>9.4f} {bounded:>13}")
-print("  -> endliche k: Trajektorie erreicht GENAU den Gruppen-Max (endlich viele Zustaende, beschraenkt) ;")
-print("     dichte k: Trajektorie fuellt zum globalen Plateau log2(3/2). Das ist der McKay-Diskriminator.")
+    kind='2O/2T/2I' if not dense else 'dense'
+    bounded = 'YES (=grp-max)' if not dense and abs(tmax-grpmax)<1e-6 else ('fills' if dense else f'{tmax:.3f}')
+    print(f"  {k:>3} {kind:>10} {str(order):>7} {tmax:>16.4f} {grpmax:>9.4f} {bounded:>13}")
+print("  -> finite k: the trajectory reaches EXACTLY the group max (finitely many states, bounded) ;")
+print("     dense k: the trajectory fills up to the global plateau log2(3/2). That is the McKay discriminator.")
 
-# ---- B-MAP: Dissoziations-Karte ----
-print("\n[B-MAP] Dissoziations-Karte (alle Achsen, k-aufgeloest):")
-gateM=  {2:0.000,3:0.562,4:0.765,5:0.832,8:0.815}  # M^A(sigma2) aus r6 (T3)
-print(f"  {'k':>3} {'Gruppe':>8} {'M2':>7} {'RoM':>7} {'geom':>7} {'Witness':>8} {'LGI-K3':>7} {'GateM^A':>8}")
+# ---- B-MAP: dissociation map ----
+print("\n[B-MAP] dissociation map (all axes, k-resolved):")
+gateM=  {2:0.000,3:0.562,4:0.765,5:0.832,8:0.815}  # M^A(sigma2) from r6 (T3)
+print(f"  {'k':>3} {'Group':>8} {'M2':>7} {'RoM':>7} {'geom':>7} {'Witness':>8} {'LGI-K3':>7} {'GateM^A':>8}")
 mapping=[]
 for k in [2,3,4,5,8]:
     mM2,mRoM,mGeom,wit,dense,order=max_measures(k)
     k3=K3(k)
-    # Label-Praezisierung (RUN-3-Nachzug2, 2026-07-05, NUR Kommentar, KEINE Zahl geaendert — Historie unangetastet):
-    # Die Klammerzahl (24/12/60) ist die korrekt berechnete PROJEKTIVE Ordnung (SO(3)-Quotient/PU(2)-Bild via
-    # canon_SO3; verifiziert), NICHT falsch. Inkonsistent ist NUR das binaere Praefix "2X" davor — die binaere
-    # SU(2)-Gruppe 2X hat per Definition die DOPPELTE Ordnung (2O=48, 2T=24, 2I=120), waere also mit ihrem
-    # eigenen Praefix nicht mit 24/12/60 zu paaren. Die begleitende Analyse-Notiz nennt fuer
-    # dieselbe k=2/4/8-Karte explizit "48/24/120 (2O/2T/2I, binaer)" — d.h. Rohcode (hier: projektiv + binaeres
-    # Praefix) und Notiz-Prosa (binaer) nutzen bewusst verschiedene Ebenen derselben Gruppe; kein Wert ist
-    # falsch, nur zwei Konventionen. k=4 kanonisch: projektiv T(12) <-> binaer 2T(24)=SL(2,3).
-    grp={2:'2O(24)',4:'2T(12)',8:'2I(60)'}.get(k,f'dicht')
+    # label precision (RUN-3 follow-up 2, 2026-07-05, COMMENT ONLY, NO number changed — history untouched):
+    # The number in brackets (24/12/60) is the correctly computed PROJECTIVE order (SO(3) quotient/PU(2) image via
+    # canon_SO3; verified), NOT wrong. Inconsistent is ONLY the binary prefix "2X" in front of it — the binary
+    # SU(2) group 2X has by definition TWICE the order (2O=48, 2T=24, 2I=120), and would therefore not pair with
+    # 24/12/60 under its own prefix. The accompanying analysis note gives, for the same k=2/4/8 map,
+    # explicitly "48/24/120 (2O/2T/2I, binary)" — i.e. raw code (here: projective + binary
+    # prefix) and note prose (binary) deliberately use different levels of the same group; no value is
+    # wrong, only two conventions. k=4 canonical: projective T(12) <-> binary 2T(24)=SL(2,3).
+    grp={2:'2O(24)',4:'2T(12)',8:'2I(60)'}.get(k,f'dense')
     gm=gateM.get(k,np.nan)
     mapping.append((k,grp,mM2,mRoM,mGeom,wit,k3,gm))
     print(f"  {k:>3} {grp:>8} {mM2:>7.4f} {mRoM:>7.4f} {mGeom:>7.4f} {wit:>8.4f} {k3:>7.4f} {gm:>8.4f}")
-print(f"\n  LGI-Anker-Check: K3(k=4)={K3(4):.4f}(~1.0 klassisch) K3(k=8)={K3(8):.4f}(3/sqrt5={3/np.sqrt(5):.4f}) K3(dicht)->{K3(5):.4f}(Lueders 1.5)")
-print("  DISSOZIATION: k=4 -> Magic & Witness & GateM HOCH, aber LGI-K3=1.0 (klassisch, BLIND). Die Achsen entkoppeln.")
+print(f"\n  LGI-Anker-Check: K3(k=4)={K3(4):.4f}(~1.0 classical) K3(k=8)={K3(8):.4f}(3/sqrt5={3/np.sqrt(5):.4f}) K3(dense)->{K3(5):.4f}(Lueders 1.5)")
+print("  DISSOCIATION: k=4 -> magic & witness & gateM HIGH, but LGI-K3=1.0 (classical, BLIND). The axes decouple.")
 
 import json
-json.dump({'curve':[{'k':k,'M2':m,'RoM':r,'geom':g,'order':o,'dense':d} for (k,m,r,g,o,d) in curve],
-           'map':[{'k':k,'group':grp,'M2':m,'RoM':r,'geom':g,'witness':w,'K3':k3,'gateMA':gm} for (k,grp,m,r,g,w,k3,gm) in mapping],
-           'limits':{'M2_max':float(np.log2(1.5)),'RoM_max':float(np.sqrt(3))}},
-          open('p5a_ergebnis_t4.json','w'),indent=2)
-print("\nGeschrieben: p5a_ergebnis_t4.json")
+from pathlib import Path
+if __name__ == "__main__":
+    json.dump({'curve':[{'k':k,'M2':m,'RoM':r,'geom':g,'order':o,'dense':d} for (k,m,r,g,o,d) in curve],
+               'map':[{'k':k,'group':grp,'M2':m,'RoM':r,'geom':g,'witness':w,'K3':k3,'gateMA':gm} for (k,grp,m,r,g,w,k3,gm) in mapping],
+               'limits':{'M2_max':float(np.log2(1.5)),'RoM_max':float(np.sqrt(3))}},
+              open(Path(__file__).resolve().parent / 'p5a_ergebnis_t4.json','w'),indent=2)
+    print("\nWritten: p5a_ergebnis_t4.json")

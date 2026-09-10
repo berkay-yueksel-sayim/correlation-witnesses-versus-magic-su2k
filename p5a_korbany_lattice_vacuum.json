@@ -17,6 +17,7 @@
       "V_gs_3x3.npy": "4512a6ea580f76fb3bf7e44d9d195e9f",
       "Mgs_j_3x3.npy": "899655e2cef95d44f522d44a20714b06"
     },
+    "lattice_input_location": "Both lattice inputs are deposited in the companion record (doi:10.5281/zenodo.21362245) as p6_V_gs_3x3.npy and p6_Mgs_j_3x3.npy; the md5 values above identify them there. They are not duplicated in this record.",
     "note": "Vacuum column identified intrinsically as the unique all-positive column of the extracted S (S_{0a}=d_a/D>0), without theory labeling. The lattice extraction is an independent data source from the analytic quantum dimensions d=(1,phi,phi,phi^2)."
   }
 }

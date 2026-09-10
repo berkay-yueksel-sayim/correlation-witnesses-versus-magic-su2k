@@ -1,7 +1,7 @@
 """
-B_magic r2 (Sub-CC 3): 2. Maß (RoM) + LGI K3 EXAKT nach Paper 4 (K3=2C(B)-C(B^2),
-C(U)=zz-Komponente von SO(3)-R(U)) + Vier-Wege-Dissoziations-Tabelle. Deterministisch, Seed 2026.
-Reuse der unabhaengigen Konventionen aus engine.py (eigene F/R-Herleitung).
+B_magic r2 (sub-CC 3): 2nd measure (RoM) + LGI K3 EXACTLY as in Paper 4 (K3=2C(B)-C(B^2),
+C(U)=zz component of SO(3)-R(U)) + four-way dissociation table. Deterministic, seed 2026.
+Reuses the independent conventions from engine.py (own F/R derivation).
 """
 import numpy as np
 np.random.seed(2026)
@@ -23,18 +23,18 @@ def to_SO3(U):
             R[i,j]=0.5*np.real(np.trace(sig[i]@U@sig[j]@U.conj().T))
     return R
 
-# ---- Magic-Masse ----
+# ---- magic measures ----
 def M2(psi):
     psi=psi/np.linalg.norm(psi); ev=[np.real(np.vdot(psi,P@psi)) for P in PAULIS]
     return -np.log2(sum(e**4 for e in ev)/2)
-def RoM(psi):  # single-qubit Robustness of Magic = L1-Norm des Bloch-Vektors
+def RoM(psi):  # single-qubit robustness of magic = L1 norm of the Bloch vector
     psi=psi/np.linalg.norm(psi)
     return sum(abs(np.real(np.vdot(psi,P@psi))) for P in (X,Y,Z))
 
 STAB=[np.array(v,dtype=complex)/np.linalg.norm(v) for v in
       ([1,0],[0,1],[1,1],[1,-1],[1,1j],[1,-1j])]
 
-def GEOM(psi):  # 3. Maß: 1 - max Stabilizer-Fidelity (geometrisches Maß)
+def GEOM(psi):  # 3rd measure: 1 - max stabilizer fidelity (geometric measure)
     psi=psi/np.linalg.norm(psi)
     return 1.0 - max(abs(np.vdot(s,psi))**2 for s in STAB)
 
@@ -64,9 +64,9 @@ def magic_over(k):
             psi=U@s; m2=max(m2,M2(psi)); rom=max(rom,RoM(psi)); geo=max(geo,GEOM(psi))
     return m2,rom,geo
 
-# ---- LGI K3 = 2 C(B) - C(B^2), C(U,n)=n.R(U).n ; K3 ist das MAXIMUM ueber die
-#      Braid-Gruppe (Paper 4): dichte k -> 3/2, endliche gedeckelt. axis-/state-optimiert. ----
-def K3_opt_elem(B):  # max ueber Mess-Achse n  (= state+axis-opt, da K3(rho)=Tr[rho M])
+# ---- LGI K3 = 2 C(B) - C(B^2), C(U,n)=n.R(U).n ; K3 is the MAXIMUM over the
+#      braid group (Paper 4): dense k -> 3/2, finite ones capped. axis-/state-optimized. ----
+def K3_opt_elem(B):  # max over measurement axis n  (= state+axis-opt, since K3(rho)=Tr[rho M])
     M=2*to_SO3(B)-to_SO3(B@B); Ms=0.5*(M+M.T)
     return float(np.max(np.linalg.eigvalsh(Ms)))
 def K3_zhat_elem(B):
@@ -84,28 +84,28 @@ def K3_level(k):
     return max(K3_opt_elem(B) for B in els), max(K3_zhat_elem(B) for B in els)
 
 print("="*70)
-print("VIER-WEGE-DISSOZIATIONS-TABELLE  (LGI K3 = max ueber Braid-Gruppe, Paper 4)")
+print("FOUR-WAY DISSOCIATION TABLE  (LGI K3 = max over braid group, Paper 4)")
 print(f"{'k':>2} {'FLW-univ.':>9} {'3-Str.':>8} {'K3opt':>6} {'K3(Qz)':>7} {'LGI?':>5} {'M2':>7} {'RoM':>6} {'geom':>6}  Magic?")
-flw=lambda k: 'nein' if k in(1,2) else ('NEIN(*)' if k==4 else 'ja')
+flw=lambda k: 'no' if k in(1,2) else ('NO(*)' if k==4 else 'yes')
 for k in [2,3,4,5,6,7,8,9,10]:
-    fin='endlich' if k in (2,4,8) else 'dicht'
+    fin='finite' if k in (2,4,8) else 'dense'
     ko,kz=K3_level(k); m2,rom,geo=magic_over(k)
-    fires='JA' if ko>1+1e-3 else 'NEIN'
-    mag ='NEIN' if m2<1e-6 else 'JA'
+    fires='YES' if ko>1+1e-3 else 'NO'
+    mag ='NO' if m2<1e-6 else 'YES'
     print(f"{k:>2} {flw(k):>9} {fin:>8} {ko:>6.3f} {kz:>7.3f} {fires:>5} {m2:>7.4f} {rom:>6.3f} {geo:>6.3f}  {mag}")
 print("="*70)
-print(f"Anker: dicht K3opt->3/2 ; k=8 K3opt=1.427 (max-Q, ikos.72°) & K3(Qz)=3/sqrt5={3/np.sqrt(5):.4f} ; k=4 K3=1.000 (inert)")
-print("k=4: LGI feuert NICHT (K3=1, jede Achse+jeder Zustand) ABER Magic fast max (M2=0.558) => DISSOZIATION.")
-print("Target 3: K3(rho)=Tr[rho M] zustandsabhaengig; k=4-Maximum ueber ALLE Zustaende+Achsen+Braids = 1.0")
-print("  => genuin blind, strukturell inert, KEINE Tautologie. (*) k=4 = die FLW-Ausnahme (theorie-nicht-universell).")
+print(f"Anchors: dense K3opt->3/2 ; k=8 K3opt=1.427 (max-Q, icos.72°) & K3(Qz)=3/sqrt5={3/np.sqrt(5):.4f} ; k=4 K3=1.000 (inert)")
+print("k=4: LGI does NOT fire (K3=1, every axis+every state) BUT magic nearly max (M2=0.558) => DISSOCIATION.")
+print("Target 3: K3(rho)=Tr[rho M] state-dependent; k=4 maximum over ALL states+axes+braids = 1.0")
+print("  => genuinely blind, structurally inert, NOT a tautology. (*) k=4 = the FLW exception (theory-non-universal).")
 
 print("="*70)
 print("B-leicht: MAGIC-WITNESS D = 1/2(1+sum|<P>|), feuert iff sum|<P>|>1  (= Octahedron/RoM-Kriterium, n&s 1 Qubit)")
 print(f"{'k':>2} {'sum|P|':>7} {'D':>6} {'Witness':>8} {'K3opt':>6} {'LGI?':>5}")
 for k in [2,4,8,3,5]:
     ko,_=K3_level(k); m2,rom,geo=magic_over(k)
-    D=0.5*(1+rom); fire='FEUERT' if rom>1+1e-6 else 'nein'
-    lgi='JA' if ko>1+1e-3 else 'NEIN'
+    D=0.5*(1+rom); fire='FIRES' if rom>1+1e-6 else 'no'
+    lgi='YES' if ko>1+1e-3 else 'NO'
     print(f"{k:>2} {rom:>7.3f} {D:>6.3f} {fire:>8} {ko:>6.3f} {lgi:>5}")
-print("=> k=4: Magic-Witness FEUERT (sum|P|=1.715>1, D=1.358) wo LGI BLIND ist (K3=1.000) = gefeuerter Detektor am Blind-Punkt.")
-print("   k=2 (Clifford): sum|P|=1.000 (feuert NICHT), M2=0 -> sauberer fire/vanish. (Witness-Mathe Lehrbuch; neu = operationale Anwendung.)")
+print("=> k=4: magic witness FIRES (sum|P|=1.715>1, D=1.358) where LGI is BLIND (K3=1.000) = a firing detector at the blind point.")
+print("   k=2 (Clifford): sum|P|=1.000 (does NOT fire), M2=0 -> clean fire/vanish. (Witness math is textbook; new = the operational application.)")

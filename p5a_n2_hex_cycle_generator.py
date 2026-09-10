@@ -1,42 +1,42 @@
 """
-sim04c TEIL A — Hex-Zyklus-Generator (isoliertes Pre-Requisite).
+sim04c PART A — hex cycle generator (isolated pre-requisite).
 
-Geometrische Konstruktion einer Hexagon-Plakette auf einem N×M Honeycomb-Torus.
-NICHT eine ungeordnete Kantenliste — sondern ein geordneter Zyklus
-A → B → A → B → A → B → (zurück zu A), 6 distinkte Vertices.
+Geometric construction of a hexagon plaquette on an N×M honeycomb torus.
+NOT an unordered edge list — but an ordered cycle
+A → B → A → B → A → B → (back to A), 6 distinct vertices.
 
-Konvention:
-    Vertex-IDs:
-        A(i,j) für i ∈ [0,N), j ∈ [0,M):  ID = i*M + j         (range: 0..N*M-1)
-        B(i,j) für i ∈ [0,N), j ∈ [0,M):  ID = N*M + i*M + j   (range: N*M..2*N*M-1)
+Convention:
+    Vertex IDs:
+        A(i,j) for i ∈ [0,N), j ∈ [0,M):  ID = i*M + j         (range: 0..N*M-1)
+        B(i,j) for i ∈ [0,N), j ∈ [0,M):  ID = N*M + i*M + j   (range: N*M..2*N*M-1)
 
-    Kanten-IDs (3 pro A-Site):
-        x-Kante  (A(i,j) — B(i,j)):                ID = 3*(i*M + j) + 0
-        y-Kante  (A(i,j) — B((i-1)%N, j)):         ID = 3*(i*M + j) + 1
-        z-Kante  (A(i,j) — B(i, (j-1)%M)):         ID = 3*(i*M + j) + 2
+    Edge IDs (3 per A site):
+        x edge  (A(i,j) — B(i,j)):                 ID = 3*(i*M + j) + 0
+        y edge  (A(i,j) — B((i-1)%N, j)):          ID = 3*(i*M + j) + 1
+        z edge  (A(i,j) — B(i, (j-1)%M)):          ID = 3*(i*M + j) + 2
 
-    Damit: jede Kante ist eindeutig durch (Typ, A-Site-Index) bestimmt.
-    B-Sites haben jeweils:
-        x-Kante: zu A(i,j)
-        y-Kante: zu A((i+1)%N, j)
-        z-Kante: zu A(i, (j+1)%M)
+    Thus: every edge is uniquely determined by (type, A site index).
+    B sites each have:
+        x edge: to A(i,j)
+        y edge: to A((i+1)%N, j)
+        z edge: to A(i, (j+1)%M)
 
-Hexagon-Plakette (i,j) — geometrische Definition:
-    Sechs-Schritt-Zyklus startend bei A(i,j), abwechselnd A→B (x/y/z) und B→A
-    (entgegengesetzte Richtung), so dass nach 6 Schritten wieder bei A(i,j):
+Hexagon plaquette (i,j) — geometric definition:
+    Six-step cycle starting at A(i,j), alternating A→B (x/y/z) and B→A
+    (opposite direction), such that after 6 steps we are back at A(i,j):
 
-        Schritt 1: A(i,j) -- x-Kante --> B(i,j)
-        Schritt 2: B(i,j) -- y-rev   --> A((i+1)%N, j)
-        Schritt 3: A((i+1)%N, j) -- z-Kante --> B((i+1)%N, (j-1)%M)
-        Schritt 4: B((i+1)%N, (j-1)%M) -- x-rev --> A((i+1)%N, (j-1)%M)
-        Schritt 5: A((i+1)%N, (j-1)%M) -- y-Kante --> B(i, (j-1)%M)
-        Schritt 6: B(i, (j-1)%M) -- z-rev --> A(i, j)   [zurück]
+        Step 1: A(i,j) -- x edge --> B(i,j)
+        Step 2: B(i,j) -- y-rev  --> A((i+1)%N, j)
+        Step 3: A((i+1)%N, j) -- z edge --> B((i+1)%N, (j-1)%M)
+        Step 4: B((i+1)%N, (j-1)%M) -- x-rev --> A((i+1)%N, (j-1)%M)
+        Step 5: A((i+1)%N, (j-1)%M) -- y edge --> B(i, (j-1)%M)
+        Step 6: B(i, (j-1)%M) -- z-rev --> A(i, j)   [back]
 
-Diese Konstruktion garantiert:
-    * 6 Schritte
-    * Vertices alternieren A-B-A-B-A-B
-    * Auf nicht-zu-kleinen Tori (N≥2, M≥2): 6 distinkte Vertices
-    * Geschlossener Ring
+This construction guarantees:
+    * 6 steps
+    * vertices alternate A-B-A-B-A-B
+    * on not-too-small tori (N≥2, M≥2): 6 distinct vertices
+    * a closed ring
 """
 import json
 from pathlib import Path
@@ -47,7 +47,7 @@ CheckResult = namedtuple("CheckResult",
                          ["passed", "n_clean", "n_total", "details"])
 
 
-# === Vertex und Edge ID Funktionen ===
+# === vertex and edge ID functions ===
 
 def A_id(i, j, N, M):
     return (i % N) * M + (j % M)
@@ -72,7 +72,7 @@ def edge_z(i, j, N, M):
 
 def get_plaquette_cycle(i, j, N, M):
     """
-    Geometrische Konstruktion der Plakette (i,j) als geordneter A-B-A-B-A-B Zyklus.
+    Geometric construction of plaquette (i,j) as an ordered A-B-A-B-A-B cycle.
 
     Returns:
         edges: list of 6 edge-IDs in cyclic order
@@ -92,12 +92,12 @@ def get_plaquette_cycle(i, j, N, M):
     vertices = [A0, B0, A1, B1, A2, B2]
 
     # 6 Edges in cyclic order:
-    # A0 - B0:  x-Kante von A(i,j)
-    # B0 - A1:  y-Kante von A(ip, j)        [B(i,j) hat y-Kante zu A(ip, j)]
-    # A1 - B1:  z-Kante von A(ip, j)        [A(ip, j) z-Kante zu B(ip, (j-1)%M) = B(ip, jm) = B1]
-    # B1 - A2:  x-Kante von A(ip, jm)       [B(ip, jm) hat x-Kante zu A(ip, jm)]
-    # A2 - B2:  y-Kante von A(ip, jm)       [A(ip, jm) y-Kante zu B((ip-1)%N, jm) = B(i, jm) = B2]
-    # B2 - A0:  z-Kante von A(i, j)         [B(i, jm) hat z-Kante zu A(i, (jm+1)%M) = A(i, j) = A0]
+    # A0 - B0:  x edge of A(i,j)
+    # B0 - A1:  y edge of A(ip, j)          [B(i,j) has a y edge to A(ip, j)]
+    # A1 - B1:  z edge of A(ip, j)          [A(ip, j) z edge to B(ip, (j-1)%M) = B(ip, jm) = B1]
+    # B1 - A2:  x edge of A(ip, jm)         [B(ip, jm) has an x edge to A(ip, jm)]
+    # A2 - B2:  y edge of A(ip, jm)         [A(ip, jm) y edge to B((ip-1)%N, jm) = B(i, jm) = B2]
+    # B2 - A0:  z edge of A(i, j)           [B(i, jm) has a z edge to A(i, (jm+1)%M) = A(i, j) = A0]
     edges = [
         edge_x(i,  j,  N, M),
         edge_y(ip, j,  N, M),
@@ -113,7 +113,7 @@ def get_plaquette_cycle(i, j, N, M):
 # === Sauberkeits-Check ===
 
 def get_edge_endpoints(edge_id, N, M):
-    """Gibt (vertex_a, vertex_b) für eine Kante zurück."""
+    """Returns (vertex_a, vertex_b) for an edge."""
     e_kind = edge_id % 3
     a_idx = edge_id // 3
     i = a_idx // M
@@ -131,27 +131,27 @@ def get_edge_endpoints(edge_id, N, M):
 
 def check_plaquette_cleanliness(i, j, N, M):
     """
-    Verifiziert die fünf Sauberkeits-Bedingungen für Plakette (i,j).
+    Verifies the five cleanliness conditions for plaquette (i,j).
     Returns: (passed: bool, reason: str, info: dict)
     """
     edges, vertices = get_plaquette_cycle(i, j, N, M)
 
     # 1. Genau 6 Kanten
     if len(edges) != 6:
-        return False, f"Anzahl Kanten = {len(edges)}, erwartet 6", {}
+        return False, f"number of edges = {len(edges)}, expected 6", {}
 
     # 2. Genau 6 Kanten distinkt
     if len(set(edges)) != 6:
-        return False, f"Kanten nicht distinkt: {edges}", {}
+        return False, f"edges not distinct: {edges}", {}
 
-    # 3. Genau 6 Vertices und alle distinkt
+    # 3. exactly 6 vertices and all distinct
     if len(vertices) != 6:
-        return False, f"Anzahl Vertices = {len(vertices)}", {}
+        return False, f"number of vertices = {len(vertices)}", {}
     if len(set(vertices)) != 6:
-        return False, f"Vertices nicht distinkt: {vertices}", {}
+        return False, f"vertices not distinct: {vertices}", {}
 
-    # 4. Jede aufeinanderfolgende Kante teilt genau einen Vertex mit der vorigen
-    #    UND die Endpunkte der Kanten matchen die Vertex-Sequenz
+    # 4. each consecutive edge shares exactly one vertex with the previous one
+    #    AND the edge endpoints match the vertex sequence
     for k in range(6):
         v_curr = vertices[k]
         v_next = vertices[(k + 1) % 6]
@@ -159,17 +159,17 @@ def check_plaquette_cleanliness(i, j, N, M):
         endpoints = set(get_edge_endpoints(e, N, M))
         if endpoints != {v_curr, v_next}:
             return False, (
-                f"Kante {e} hat Endpunkte {endpoints}, "
-                f"erwartet {{{v_curr}, {v_next}}} an Position {k}"
+                f"edge {e} has endpoints {endpoints}, "
+                f"expected {{{v_curr}, {v_next}}} at position {k}"
             ), {}
 
     # 5. Vertices alternieren A-B-A-B-A-B
     NM = N * M
     is_A = [v < NM for v in vertices]
     if is_A != [True, False, True, False, True, False]:
-        return False, f"Vertices alternieren nicht A-B-A-B-A-B: A={is_A}", {}
+        return False, f"vertices do not alternate A-B-A-B-A-B: A={is_A}", {}
 
-    # 6. Plus: kein Vertex berührt mehr als 2 Plaketten-Kanten
+    # 6. plus: no vertex touches more than 2 plaquette edges
     incidence = {v: 0 for v in vertices}
     for e in edges:
         for v in get_edge_endpoints(e, N, M):
@@ -178,8 +178,8 @@ def check_plaquette_cleanliness(i, j, N, M):
     max_inc = max(incidence.values())
     if max_inc != 2:
         return False, (
-            f"Vertex-Inzidenz nicht uniform 2: max={max_inc}, "
-            f"verteilung={dict(incidence)}"
+            f"vertex incidence not uniformly 2: max={max_inc}, "
+            f"distribution={dict(incidence)}"
         ), {}
 
     return True, "OK", {"edges": edges, "vertices": vertices,
@@ -188,7 +188,7 @@ def check_plaquette_cleanliness(i, j, N, M):
 
 def check_all_plaquettes(N, M):
     """
-    Prüft alle N*M Plaketten auf Sauberkeit.
+    Checks all N*M plaquettes for cleanliness.
     Returns: CheckResult
     """
     n_total = N * M
@@ -237,19 +237,19 @@ def main():
             for d in result.details:
                 if not d["passed"]:
                     print(f"    p{d['plaquette']}: {d['reason']}")
-                    break  # nur eine Beispiel-Diagnose
+                    break  # only one example diagnosis
 
     summary["smallest_clean_NxM"] = smallest_clean
 
     print()
     if smallest_clean is None:
-        print("STOP-KRITERIUM: Kein NxM ≤ 5x5 sauber.")
-        print("Diagnose erforderlich, kein weiterer Code.")
+        print("STOP CRITERION: no NxM ≤ 5x5 is clean.")
+        print("Diagnosis required, no further code.")
     else:
         print(f"Kleinstes sauberes Gitter: {smallest_clean}")
-        # Visualisiere eine Plakette des kleinsten sauberen Gitters
+        # visualize one plaquette of the smallest clean lattice
         N_s, M_s = map(int, smallest_clean.split("x"))
-        print(f"\nBeispiel-Plakette (0,0) auf {smallest_clean}:")
+        print(f"\nExample plaquette (0,0) on {smallest_clean}:")
         edges, vertices = get_plaquette_cycle(0, 0, N_s, M_s)
         NM = N_s * M_s
         for k in range(6):
@@ -274,4 +274,7 @@ def main():
 
 
 if __name__ == "__main__":
+    import sys
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     main()

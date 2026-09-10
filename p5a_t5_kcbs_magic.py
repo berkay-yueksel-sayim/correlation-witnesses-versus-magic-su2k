@@ -1,16 +1,21 @@
 """
-T5 — Kontextualitaet ↔ Magic am SELBEN SU(2)_k-Anyon-State, 2026-06-24, Seed 2026.
-KCBS braucht d>=3 (Qubit ist nicht-kontextuell) -> d=3-Fusionsraum (n=4 strands, total=2, dim 3 = Qutrit).
-Auf demselben Qutrit: (i) KCBS-Pentagon-Witness (Klyachko), klass. 2, quanten √5≈2.236 ; (ii) Mana(d=3, Gross-Wigner,
-prime) als Magic-Mass. Frage: koppeln Kontextualitaet und Magic ueber den Braid-Orbit, k-aufgeloest?
+T5 — contextuality ↔ magic on the SAME SU(2)_k anyon state, 2026-06-24, seed 2026.
+KCBS needs d>=3 (a qubit is non-contextual) -> d=3 fusion space (n=4 strands, total=2, dim 3 = qutrit).
+On the same qutrit: (i) KCBS pentagon witness (Klyachko), class. 2, quantum √5≈2.236 ; (ii) Mana(d=3, Gross-Wigner,
+prime) as the magic measure. Question: do contextuality and magic couple over the braid orbit, k-resolved?
 
 HEDGES (Volltext-Check 2026-06-24, PFLICHT):
-- Chou arXiv:2506.14537 (peer-rev. MDPI) hat Fibonacci-Braid-KCBS-Kontextualitaet (state-dependent) bereits → KEINE Erstheit
-  fuer "Anyon-Braiding zeigt KCBS". Unser Restbeitrag: numer. reproduzierbare Zahl (Chou zeigt keine) + k-Aufloesung +
-  Magic↔Kontext-Kopplung am selben State (Chou hat null Magic).
-- Howard-Wallman-Veitch-Emerson 1401.4174 (Kontext=Magic) gilt fuer qudits ODD PRIME d → nur Analogie/Motivation fuer unser Qutrit.
-Pentagon GENERISCH orientiert (fixe Zufalls-SO(3), Seed 2026) — sonst triviale Achsen-Ausrichtung. Eigene Herleitung.
+- Chou arXiv:2506.14537 (peer-rev. MDPI) already has Fibonacci-braid KCBS contextuality (state-dependent) → NO priority claim
+  for "anyon braiding shows KCBS". Our remaining contribution: a numerically reproducible number (Chou gives none) + k resolution +
+  magic↔context coupling on the same state (Chou has no magic).
+- Howard-Wallman-Veitch-Emerson 1401.4174 (context=magic) holds for qudits of ODD PRIME d → only analogy/motivation for our qutrit.
+Pentagon oriented GENERICALLY (fixed random SO(3), seed 2026) — otherwise the axes align trivially. Own derivation.
 """
+import sys
+
+if __name__ == "__main__" and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 import numpy as np
 np.random.seed(2026)
 
@@ -72,7 +77,7 @@ def build_HW(d=3):
     return A
 AW=build_HW(3)
 def mana(psi):
-    psi=psi/np.linalg.norm(psi); return np.log2(sum(abs(np.real(np.vdot(psi,Au@psi))/3) for Au in AW.values()))  # log2-Basis (Serien-Konvention, RUN-3-Nachzug2 2026-07-05; war np.log/ln — Normierung Sigma_u A(u)=d*I identisch zu r9, verifiziert)
+    psi=psi/np.linalg.norm(psi); return np.log2(sum(abs(np.real(np.vdot(psi,Au@psi))/3) for Au in AW.values()))  # log2 base (series convention, RUN-3 follow-up 2 2026-07-05; was np.log/ln — normalization Sigma_u A(u)=d*I identical to r9, verified)
 
 def canon(U):
     ph=U[np.argmax(np.abs(U[:,0])),0]; U=U*np.conj(ph)/abs(ph)
@@ -88,25 +93,25 @@ def group(gens,cap=600):
             if len(seen)>cap: return list(seen.values()),True
     return list(seen.values()),False
 
-print("="*74); print("T5 — KONTEXTUALITAET ↔ MAGIC am selben d=3-Anyon-Qutrit (KCBS + Mana)")
+print("="*74); print("T5 — CONTEXTUALITY ↔ MAGIC on the same d=3 anyon qutrit (KCBS + Mana)")
 print("="*74)
 # Dim-Check + Locks
-g4,B4=build_braid(4,8,2); print(f"Fusionsraum n=4,total=2: dim={len(B4)} (Qutrit) Pfade={B4}")
+g4,B4=build_braid(4,8,2); print(f"Fusion space n=4,total=2: dim={len(B4)} (Qutrit) Pfade={B4}")
 assert len(B4)==3, f"dim!={3}"
-# LOCK: KCBS-Bounds — Apex erreicht √5, generischer Komp.-Basiszustand < √5
+# LOCK: KCBS bounds — apex reaches √5, a generic comp.-basis state < √5
 import itertools
-apex=rand_SO3(2026)@np.array([0,0,1.0])  # der State, der bei dieser Orientierung √5 gibt (KV=R@v_kanon -> Apex=R@(0,0,1))
-print(f"[LOCK] KCBS quanten-max (Apex) = {kcbs(apex.astype(complex)):.4f} (Soll √5={np.sqrt(5):.4f})")
-print(f"[LOCK] KCBS Komp.-Basis e0/e1/e2 = {[round(kcbs(np.eye(3,dtype=complex)[:,j]),3) for j in range(3)]} (generisch, <√5)")
-# LOCK: Mana stabilizer/Komp.-Basis -> 0 ; Zufall > 0
-print(f"[LOCK] Mana(d=3) Komp.-Basis = {[round(mana(np.eye(3,dtype=complex)[:,j]),3) for j in range(3)]} (=0) ; Zufall={mana(np.random.randn(3)+1j*np.random.randn(3)):.3f}(>0)")
+apex=rand_SO3(2026)@np.array([0,0,1.0])  # the state that gives √5 at this orientation (KV=R@v_kanon -> apex=R@(0,0,1))
+print(f"[LOCK] KCBS quanten-max (Apex) = {kcbs(apex.astype(complex)):.4f} (target √5={np.sqrt(5):.4f})")
+print(f"[LOCK] KCBS comp. basis e0/e1/e2 = {[round(kcbs(np.eye(3,dtype=complex)[:,j]),3) for j in range(3)]} (generic, <√5)")
+# LOCK: Mana stabilizer/comp. basis -> 0 ; random > 0
+print(f"[LOCK] Mana(d=3) comp. basis = {[round(mana(np.eye(3,dtype=complex)[:,j]),3) for j in range(3)]} (=0) ; random={mana(np.random.randn(3)+1j*np.random.randn(3)):.3f}(>0)")
 
-print("\n[K-RESOLVED] max KCBS + max Mana ueber Braid-Orbit + Kopplung:")
-print(f"  {'k':>3} {'Typ':>7} {'|grp|':>7} {'maxKCBS':>8} {'kontextuell?':>13} {'maxMana':>8} {'Mana@KCBSmax':>13} {'corr(K,Mana)':>13}")
+print("\n[K-RESOLVED] max KCBS + max Mana over the braid orbit + coupling:")
+print(f"  {'k':>3} {'Type':>7} {'|grp|':>7} {'maxKCBS':>8} {'contextual?':>13} {'maxMana':>8} {'Mana@KCBSmax':>13} {'corr(K,Mana)':>13}")
 rows=[]
 for k in [2,4,8,3,5]:
     gens,B=build_braid(4,k,2)
-    if len(B)!=3: print(f"  k={k}: dim={len(B)}!=3 uebersprungen"); continue
+    if len(B)!=3: print(f"  k={k}: dim={len(B)}!=3 skipped"); continue
     els,dense=group(gens)
     if dense:
         els=[]
@@ -121,15 +126,17 @@ for k in [2,4,8,3,5]:
     Ks=np.array(Ks); Ms=np.array(Ms)
     maxK=Ks.max(); maxM=Ms.max(); mAtK=Ms[np.argmax(Ks)]
     corr=np.corrcoef(Ks,Ms)[0,1] if Ks.std()>1e-9 and Ms.std()>1e-9 else float('nan')
-    ctx='JA (>2)' if maxK>2+1e-6 else 'nein'
-    typ='endl.' if not dense else 'dicht'
-    rows.append((k,typ,len(els) if not dense else None,maxK,ctx,maxM,mAtK,corr))
-    print(f"  {k:>3} {typ:>7} {str(len(els) if not dense else '∞'):>7} {maxK:>8.4f} {ctx:>13} {maxM:>8.4f} {mAtK:>13.4f} {corr:>13.3f}")
+    ctx='YES (>2)' if maxK>2+1e-6 else 'no'
+    kind='finite' if not dense else 'dense'
+    rows.append((k,kind,len(els) if not dense else None,maxK,ctx,maxM,mAtK,corr))
+    print(f"  {k:>3} {kind:>7} {str(len(els) if not dense else '∞'):>7} {maxK:>8.4f} {ctx:>13} {maxM:>8.4f} {mAtK:>13.4f} {corr:>13.3f}")
 
-print("\n  DEUTUNG: maxKCBS>2 = Braiding erreicht kontextuellen Qutrit-State; corr(K,Mana) = Kopplung der Achsen.")
-print("  HEDGES: KEINE Erstheit fuer Braid-KCBS (Chou 2506.14537 state-dep., peer-rev.); Howard 1401.4174 = qudit/odd-prime-d (Analogie).")
+print("\n  READING: maxKCBS>2 = braiding reaches a contextual qutrit state; corr(K,Mana) = coupling of the axes.")
+print("  HEDGES: NO priority claim for braid-KCBS (Chou 2506.14537 state-dep., peer-rev.); Howard 1401.4174 = qudit/odd-prime-d (analogy).")
 import json
-json.dump({'kcbs_classical':2,'kcbs_quantum':float(np.sqrt(5)),
-           'rows':[{'k':k,'typ':t,'maxKCBS':float(mk),'contextual':c,'maxMana':float(mm),'Mana_at_KCBSmax':float(ma),'corr':float(co) if co==co else None} for (k,t,_,mk,c,mm,ma,co) in rows]},
-          open('p5a_ergebnis_t5.json','w'),indent=2)
-print("\nGeschrieben: p5a_ergebnis_t5.json")
+from pathlib import Path
+if __name__ == "__main__":
+    json.dump({'kcbs_classical':2,'kcbs_quantum':float(np.sqrt(5)),
+               'rows':[{'k':k,'type':t,'maxKCBS':float(mk),'contextual':c,'maxMana':float(mm),'Mana_at_KCBSmax':float(ma),'corr':float(co) if co==co else None} for (k,t,_,mk,c,mm,ma,co) in rows]},
+              open(Path(__file__).resolve().parent / 'p5a_ergebnis_t5.json','w'),indent=2)
+    print("\nWritten: p5a_ergebnis_t5.json")

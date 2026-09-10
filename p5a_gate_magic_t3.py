@@ -1,20 +1,20 @@
 """
-T3 — GATE-/Channel-Magic des SU(2)_k-Single-Qubit-Braids, 2026-06-24, Seed 2026.
-Bisher: nur ZUSTANDS-Magic. NEU: die Magie des GATTERS U(sigma) selbst, via amortisierte
-Stabilizer-Renyi-Entropie (Zhu, Chen, Shen, Liu, Yu, Wang, arXiv:2409.06659 — Volltext-VERIFIZIERT).
+T3 — gate/channel magic of the SU(2)_k single-qubit braid, 2026-06-24, seed 2026.
+So far: state magic only. NEW: the magic of the GATE U(sigma) itself, via amortized
+stabilizer Renyi entropy (Zhu, Chen, Shen, Liu, Yu, Wang, arXiv:2409.06659 — full text VERIFIED).
 
 DEFINITION (Zhu et al.):
   M_a^A(U) := sup_m  max_{|phi> in H_{n+m}}  [ M_a((U (x) I_2^m)|phi>) - M_a(|phi>) ]
-  (Output-SRE minus Input-SRE, ueber Ancilla-Zahl m + reine Eingaenge; "amortisiert").
-  Monoton fuer alle a>=0; faithful: M^A(U)=0 <=> U Clifford; T-count-Schranke t(U) >= M^A(U)/M^A(T).
-  M_2^A(T) = 2 - log2(3) ~ 0.4150 (verifizierter Anker).
+  (output SRE minus input SRE, over ancilla count m + pure inputs; "amortized").
+  Monotone for all a>=0; faithful: M^A(U)=0 <=> U Clifford; T-count bound t(U) >= M^A(U)/M^A(T).
+  M_2^A(T) = 2 - log2(3) ~ 0.4150 (verified anchor).
 
-EHRLICHE LABELS (Pflicht, aus dem Volltext-Check):
-- Wir rechnen eine UNTERE SCHRANKE (m in {0,1}; sup_m ist unbeschraenkt -> exakter Wert nur >=).
-- Nur der SINGLE-QUBIT-Braid (sigma = 2x2, fuer alle k wohldefiniertes 1-Qubit-Gatter). Der
-  Multi-Qubit-Fusionsraum (k!=2 nicht 2er-Potenz) braucht eine Encoding-Bridge -> hier NICHT.
-- Anwendung des Maszes von Zhu et al. auf U(sigma) (kein im Paper belegtes Braid-Resultat).
-Tracer/Locks: k=2 (Ising-Braid = Clifford) -> M^A=0 ; T-Gate -> 0.4150 ; H/S (Clifford) -> 0.
+HONEST LABELS (mandatory, from the full-text check):
+- We compute a LOWER BOUND (m in {0,1}; sup_m is unbounded -> exact value only >=).
+- Only the SINGLE-QUBIT braid (sigma = 2x2, a well-defined 1-qubit gate for all k). The
+  multi-qubit fusion space (k!=2 not a power of 2) needs an encoding bridge -> NOT here.
+- Application of the measure of Zhu et al. to U(sigma) (no braid result established in the paper).
+Tracer/locks: k=2 (Ising braid = Clifford) -> M^A=0 ; T gate -> 0.4150 ; H/S (Clifford) -> 0.
 """
 import numpy as np
 from scipy.optimize import minimize
@@ -35,7 +35,7 @@ def M2(psi):
     return -np.log2(s/d)
 
 def amortized_lb(U, m=0, restarts=40):
-    """untere Schranke fuer M_2^A(U): max ueber reine (1+m)-Qubit-Eingaenge von M2(out)-M2(in)."""
+    """Lower bound for M_2^A(U): max over pure (1+m)-qubit inputs of M2(out)-M2(in)."""
     dim=2**(1+m); Uf=np.kron(U,np.eye(2**m,dtype=complex))
     def neg(x):
         v=x[:dim]+1j*x[dim:]; nrm=np.linalg.norm(v)
@@ -52,29 +52,29 @@ def amortized_lb(U, m=0, restarts=40):
 def amortized(U, restarts=40):
     return max(amortized_lb(U,0,restarts), amortized_lb(U,1,restarts))
 
-# ---- SU(2)_k Single-Qubit-Braid-Generatoren (verifizierte Konventionen, engine.py r1) ----
+# ---- SU(2)_k single-qubit braid generators (verified conventions, engine.py r1) ----
 def braid_gens(k):
     d=2*np.cos(np.pi/(k+2)); R0=-np.exp(-1j*3*np.pi/(2*(k+2))); R1=np.exp(1j*np.pi/(2*(k+2)))
     root=np.sqrt(max(d*d-1,0))/d; F=np.array([[1/d,root],[root,-1/d]],complex)
     s1=np.diag([R0,R1]).astype(complex); s2=F@s1@F
     return s1,s2
 
-# ---- ANKER / LOCKS ----
-print("="*64); print("T3 — GATE-MAGIC (amortized SRE, untere Schranke m<=1)")
+# ---- ANCHORS / LOCKS ----
+print("="*64); print("T3 — GATE MAGIC (amortized SRE, lower bound m<=1)")
 print("="*64)
 T=np.diag([1,np.exp(1j*np.pi/4)]).astype(complex)
 H=np.array([[1,1],[1,-1]],complex)/np.sqrt(2)
 S=np.diag([1,1j]).astype(complex)
 mT=amortized(T); mH=amortized(H); mS=amortized(S)
-print(f"[ANKER] M_2^A(T)   = {mT:.4f}   (Soll 2-log2(3)={2-np.log2(3):.4f})  {'OK' if abs(mT-(2-np.log2(3)))<2e-2 else 'CHECK'}")
+print(f"[ANCHOR] M_2^A(T)  = {mT:.4f}   (target 2-log2(3)={2-np.log2(3):.4f})  {'OK' if abs(mT-(2-np.log2(3)))<2e-2 else 'CHECK'}")
 print(f"[LOCK ] M_2^A(H)   = {mH:.4f}   (Clifford -> 0)  {'OK' if mH<2e-2 else 'CHECK'}")
 print(f"[LOCK ] M_2^A(S)   = {mS:.4f}   (Clifford -> 0)  {'OK' if mS<2e-2 else 'CHECK'}")
 s1_2,s2_2=braid_gens(2)
 mk2=max(amortized(s1_2),amortized(s2_2))
 print(f"[LOCK ] M_2^A(sigma,k=2) = {mk2:.4f}  (Ising-Braid = Clifford -> 0)  {'OK' if mk2<3e-2 else 'CHECK'}")
 
-# ---- GATE-MAGIC-KURVE ueber k ----
-print("\n[KURVE] Gate-Magic des Single-Qubit-Braids vs k (untere Schranke):")
+# ---- GATE MAGIC CURVE over k ----
+print("\n[CURVE] Gate magic of the single-qubit braid vs k (lower bound):")
 print(f"  {'k':>2} {'M^A(s1)':>9} {'M^A(s2)':>9} {'M^A(s1s2)':>10} {'T-count>=':>10}")
 rows=[]
 for k in [2,3,4,5,8]:
@@ -83,10 +83,12 @@ for k in [2,3,4,5,8]:
     tc=m12/(2-np.log2(3))
     rows.append((k,m1,m2,m12,tc))
     print(f"  {k:>2} {m1:>9.4f} {m2:>9.4f} {m12:>10.4f} {tc:>10.3f}")
-print("\n  Labels: untere Schranke (m<=1); Single-Qubit-Braid; Anwendung von Zhu et al. 2409.06659.")
-print("  Lock k=2->0 = Ising-Clifford-Konsistenz. T-count>= = M^A(word)/M^A(T) (untere Schranke).")
+print("\n  Labels: lower bound (m<=1); single-qubit braid; application of Zhu et al. 2409.06659.")
+print("  Lock k=2->0 = Ising-Clifford consistency. T-count>= = M^A(word)/M^A(T) (lower bound).")
 import json
-json.dump({'anchors':{'T':float(mT),'H':float(mH),'S':float(mS),'sigma_k2':float(mk2),'M2A_T_exact':float(2-np.log2(3))},
-           'curve':[{'k':k,'M_A_s1':float(a),'M_A_s2':float(b),'M_A_s1s2':float(c),'Tcount_lb':float(t)} for (k,a,b,c,t) in rows]},
-          open('p5a_ergebnis_t3.json','w'),indent=2)
-print("\nGeschrieben: p5a_ergebnis_t3.json")
+from pathlib import Path
+if __name__ == "__main__":
+    json.dump({'anchors':{'T':float(mT),'H':float(mH),'S':float(mS),'sigma_k2':float(mk2),'M2A_T_exact':float(2-np.log2(3))},
+               'curve':[{'k':k,'M_A_s1':float(a),'M_A_s2':float(b),'M_A_s1s2':float(c),'Tcount_lb':float(t)} for (k,a,b,c,t) in rows]},
+              open(Path(__file__).resolve().parent / 'p5a_ergebnis_t3.json','w'),indent=2)
+    print("\nWritten: p5a_ergebnis_t3.json")

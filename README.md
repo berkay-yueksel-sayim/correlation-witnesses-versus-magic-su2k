@@ -2,7 +2,7 @@
 
 **Author:** Berkay Yüksel Sayim
 **ORCID:** [0009-0004-4993-7352](https://orcid.org/0009-0004-4993-7352)
-**DOI (this version):** [10.5281/zenodo.21134455](https://doi.org/10.5281/zenodo.21134455)
+**DOI (all versions):** [10.5281/zenodo.21134454](https://doi.org/10.5281/zenodo.21134454)
 
 ## Abstract
 
@@ -29,7 +29,7 @@ and an interface with KCBS contextuality at d=3.
 
 ## Contents
 
-This record is compiled from `main_v1.0.tex` (RevTeX 4-2). `p5a_fig1_dissociation_map.png`
+This record is compiled from `main_v1.1.tex` (RevTeX 4-2). `p5a_fig1_dissociation_map.png`
 is Fig. 1 of the paper.
 
 **Reproduction code and deposited data** (all deterministic, NumPy only
@@ -77,10 +77,39 @@ it reproduces the value cited in the paper text):
 - `p5a_mckay_four_axis_map.py` + `p5a_ergebnis_t4.json` — a fourth independent
   cross-check of the k=4 dissociation (LGI, magic, gate-magic, McKay
   correspondence together).
+- `p5a_fig2_orbit_geometry.py` + `p5a_fig2_orbit_geometry.png` — renders Fig. 2
+  (orbit geometry: group order, K3 and M2 per k) from the verified values in
+  `p5a_ergebnis_t4.json` (metadata-stripped, 300 dpi).
+- `p5a_korbany_lattice_route.py` + `p5a_korbany_lattice_vacuum.json` — the
+  genuinely independent second route for the Korbany witness H (item 1 above):
+  the vacuum column of the modular S-matrix extracted from a 3x3 lattice via the
+  rotation channel, with no analytic quantum dimensions entering. The two lattice
+  inputs of that extraction live in the companion record; the JSON names them.
+- `p5a_n2_hex_cycle_generator.py` — geometric prerequisite of
+  `p5a_n2_tsre_base.py`: the ordered hexagon cycle (A-B-A-B-A-B, six distinct
+  edges) on an N x M honeycomb torus.
+- `p5a_V_gs_2x2.npy` — the doubled-Fibonacci ground space of the 2x2 honeycomb
+  torus, (175, 4) float64, built by `fib_groundstate` in
+  `p5a_n2_tsre_base.py`; see the note below.
 
 All scripts were verified to reproduce the values cited in the paper text to
 the stated precision when re-run from this folder (2026-07-13).
 
+## The deposited ground space
+
+This file carries the ground space of the restricted sector in the basis the
+generator produces; the export is deterministic — two separate processes give
+byte-identical output. It spans the same subspace as `p6_V_gs_2x2.npy` in the
+companion record (doi:10.5281/zenodo.21362245) to machine precision — the
+projectors agree to 9.4e-17, while the arrays themselves differ
+(max |A−B| = 2.6e-1) — because the basis within that subspace differs: this
+file carries the raw output, the companion record a vacuum-adapted basis. Taken
+together the two files are the check rather than a claim: the five distinguished
+rows have rank 1 in both — that is the physics — while the occupancy pattern
+differs, [175,175,175,175] here against [170,170,175,170] there — that is the
+convention. The structure of those rows, and the lattice geometry behind it, are
+documented in the companion record.
+
 ## License
 - Paper, figures, and data: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — see `LICENSE`
-- Source code (`*.py`): [MIT License](https://opensource.org/licenses/MIT) — see `LICENSE-CODE`
+- Source code (`*.py`): [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) — see `LICENSE-CODE`

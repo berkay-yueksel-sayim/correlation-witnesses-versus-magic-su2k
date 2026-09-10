@@ -1,8 +1,8 @@
 """
 Magic — reimplementation r1, 2026-06-23.
-UNABHAENGIGE Herleitung aus Konventionen (Browser-Code NICHT kopiert).
-Ziele (Prior-Art-Gate GO): (1) M2(k)-Anker reproduzieren, (2) McKay k->{2O,2T,2I} aus
-Generator-Ordnungen re-herleiten, (3) LGI-Struktur prüfen. Deterministisch, fester Seed.
+INDEPENDENT derivation from conventions (browser code NOT copied).
+Goals (prior-art gate GO): (1) reproduce the M2(k) anchors, (2) re-derive McKay k->{2O,2T,2I}
+from generator orders, (3) check the LGI structure. Deterministic, fixed seed.
 """
 import numpy as np
 
@@ -13,7 +13,7 @@ Y = np.array([[0,-1j],[1j,0]], dtype=complex)
 Z = np.array([[1,0],[0,-1]], dtype=complex)
 PAULIS = [I2, X, Y, Z]
 
-# ---- Konventionen (SU(2)_k, j=1/2) ----
+# ---- conventions (SU(2)_k, j=1/2) ----
 def braid_data(k):
     q_arg = np.pi/(k+2)
     d = 2*np.cos(q_arg)                 # [2]_q = quantum dim of j=1/2
@@ -40,7 +40,7 @@ STAB = [np.array([1,0],dtype=complex), np.array([0,1],dtype=complex),
         np.array([1,1],dtype=complex)/np.sqrt(2), np.array([1,-1],dtype=complex)/np.sqrt(2),
         np.array([1,1j],dtype=complex)/np.sqrt(2), np.array([1,-1j],dtype=complex)/np.sqrt(2)]
 
-# ---- projektive Gruppen-Enumeration (mod globale Phase, via phasen-freie SO(3)) ----
+# ---- projective group enumeration (mod global phase, via phase-free SO(3)) ----
 def to_SO3(U):
     sig=[X,Y,Z]; R=np.zeros((3,3))
     for i in range(3):
@@ -93,9 +93,9 @@ def magic_dense(k, nwords=4000, length=24):
         mmax = max(mmax, M2(psi))
     return mmax
 
-# ---- LGI K3 (Q=Z) unter sigma_1-Schritten ----
+# ---- LGI K3 (Q=Z) under sigma_1 steps ----
 def lgi_K3_Z(k):
-    # einfacher Drei-Zeit-LGI mit Q=Z, Evolution pro Schritt = sigma_1, max-mixed Start
+    # simple three-time LGI with Q=Z, evolution per step = sigma_1, max-mixed start
     U = braid_data(k)['s1']
     def corr(steps):
         Ut = np.linalg.matrix_power(U, steps)
@@ -112,16 +112,16 @@ for k in [2,4,8]:
     uni=np.max(np.abs(s1@s1.conj().T - I2))
     f2 =np.max(np.abs(F@F - I2))
     print(f"k={k}: YBE={ybe:.2e}  unit={uni:.2e}  F^2-I={f2:.2e}  theta={np.degrees(bd['theta']):.1f}deg")
-# Magic-Formel-Anker
+# magic formula anchors
 Tplus = np.array([1, np.exp(1j*np.pi/4)],dtype=complex)/np.sqrt(2)
-print(f"M2(|0>)={M2(STAB[0]):.6f} (soll 0)  M2(T|+>)={M2(Tplus):.6f} (soll log2(4/3)={np.log2(4/3):.6f})")
+print(f"M2(|0>)={M2(STAB[0]):.6f} (target 0)  M2(T|+>)={M2(Tplus):.6f} (target log2(4/3)={np.log2(4/3):.6f})")
 nmax = max(M2(np.array([1, np.exp(1j*a)],dtype=complex)/np.sqrt(2)) for a in np.linspace(0,2*np.pi,200))
-print(f"max ueber |+>-Familie ~{nmax:.4f} ; theor. Single-Qubit-Max log2(3/2)={np.log2(1.5):.6f}")
+print(f"max over |+> family ~{nmax:.4f} ; theor. Single-Qubit-Max log2(3/2)={np.log2(1.5):.6f}")
 
 print("="*64)
-print("ANKER-TABELLE + McKay-Re-Herleitung")
-print(f"{'k':>2} {'proj_order':>10} {'closed':>6} {'sigma1_ord':>10} {'theta':>7} {'M2':>8}  Gruppe(re-hergeleitet)")
-mck={4:'O(2O)',3:'T(2T)',5:'I(2I)'}  # via sigma1-Ordnung 4/3/5
+print("ANCHOR TABLE + McKay re-derivation")
+print(f"{'k':>2} {'proj_order':>10} {'closed':>6} {'sigma1_ord':>10} {'theta':>7} {'M2':>8}  group(re-derived)   ")
+mck={4:'O(2O)',3:'T(2T)',5:'I(2I)'}  # via sigma1 order 4/3/5
 for k in [2,3,4,5,6,7,8,9,10]:
     if k in (2,4,8):
         order,closed,mmax,s1ord,theta = magic_finite(k)
@@ -130,11 +130,11 @@ for k in [2,3,4,5,6,7,8,9,10]:
     else:
         mmax=magic_dense(k)
         bd=braid_data(k)
-        print(f"{k:>2} {'dense':>10} {'-':>6} {'inf':>10} {np.degrees(bd['theta']):>6.0f} {mmax:>8.4f}  (dicht)")
+        print(f"{k:>2} {'dense':>10} {'-':>6} {'inf':>10} {np.degrees(bd['theta']):>6.0f} {mmax:>8.4f}  (dense)")
 
 print("="*64)
-print("LGI K3(Q=Z) unter sigma_1 (Struktur-Check)")
+print("LGI K3(Q=Z) under sigma_1 (structure check)")
 for k in [2,4,8]:
-    print(f"k={k}: K3(Q=Z,sigma1)={lgi_K3_Z(k):.4f}   ([sigma1,Z]=0 da diagonal -> Z erhalten)")
-print("HINWEIS: sigma_1 ist IMMER diagonal (z-Rot) -> [sigma1,Z]=0 -> K3=1 strukturell.")
-print("Die k-abhaengige K3 des Befunds nutzt Braid-WORTE/max-Q, nicht nur sigma_1 -> Target-3 braucht das volle LGI-Protokoll (offen, ehrlich geflaggt).")
+    print(f"k={k}: K3(Q=Z,sigma1)={lgi_K3_Z(k):.4f}   ([sigma1,Z]=0 since diagonal -> Z preserved)")
+print("NOTE: sigma_1 is ALWAYS diagonal (z-rot) -> [sigma1,Z]=0 -> K3=1 structurally.")
+print("The k-dependent K3 of the finding uses braid WORDS/max-Q, not just sigma_1 -> Target 3 needs the full LGI protocol (open, honestly flagged).")

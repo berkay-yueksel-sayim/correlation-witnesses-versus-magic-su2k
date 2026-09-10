@@ -1,151 +1,157 @@
-# Beweis-Note: Blindheit des dichotomen Lüders-LGI-Zeugen unter endlichen Braid-Bildern — Alignment-Geometrie (Orbit-Gram), mit Pauli-aligned-Clifford-Spezialfall
+# Proof note: blindness of the dichotomic Lüders LGI witness under finite braid images — alignment geometry (orbit Gram), with a Pauli-aligned Clifford special case
 
-**Lauf:** 2026-07-07_B_k4blind_r1 (Auftrag B2), Reparatur 2026-07-08 · **Status:** zwei Theoreme, jedes Lemma numerisch spot-gecheckt.
-**Theorem A** (Pauli-aligned-Clifford-Spezialfall): `spot_checks.py` (seed=42, deterministisch). **Theorem B** (Orbit-Gram-Geometrie, deckt das reale k=4): `spot_checks_gram.py` (deterministisch, Referenz A-p07-Reimpl reproduziert). Rohausgaben beider am Ende dieser Note.
-**Wording:** Sagbar ist „dieser Zeuge ist strukturell blind, weil Q-Achse und Orbit ausgerichtet sind" — nicht mehr, keine Erstheit. Fremde Resultate sind zugeschrieben (Jones; Tuba–Wenzl; Freedman–Larsen–Wang; Budroni–Emary).
+**Run:** 2026-07-07_B_k4blind_r1 (task B2), repair 2026-07-08 · **Status:** two theorems, every lemma numerically spot-checked.
+**Theorem A** (Pauli-aligned Clifford special case): `spot_checks.py` (seed=42, deterministic). **Theorem B** (orbit Gram geometry, covers the real k=4): `spot_checks_gram.py` (deterministic, reproduces the A-p07 reference reimplementation). Raw output of both at the end of this note.
+**Wording:** What is sayable is "this witness is structurally blind because the Q axis and the orbit are aligned" — no more, no priority claim. Results by others are attributed (Jones; Tuba–Wenzl; Freedman–Larsen–Wang; Budroni–Emary).
 
 ---
 
-## Setup und Definitionen
+## Setup and definitions
 
-- Qubit, festes dichotomes Q = n₀·σ (Standardrahmen: Q = Pauli-Z, n₀ = e_z). Drei Messzeiten t1 < t2 < t3; Propagation zwischen den Zeiten durch Elemente einer Gruppe G ⊂ SU(2): V1 (t1→t2), V2 (t2→t3). Heisenberg-Observablen:
-  Q1 = Q, Q2 = V1† Q V1, Q3 = (V2V1)† Q (V2V1). Deren Bloch-Richtungen n1 = n₀, n2, n3 liegen im Orbit von n₀ unter dem SO(3)-Bild von G; **n2 und n3 sind unabhängig frei wählbar, weil V1 und V2 unabhängig sind.**
-- **Lüders-Korrelator** für dichotome projektive Messungen (Standard-Konvention, vgl. Fritz 2010; Budroni–Emary arXiv:1309.3678):
-  C_ij = Σ_{a,b=±1} a·b · P(a bei t_j, b bei t_i) = (1/2) tr(ρ {Q_i, Q_j}).
-- **Zeuge:** K3 = C21 + C32 − C31; makrorealistische Schranke K3 ≤ 1.
+- Qubit, fixed dichotomic Q = n₀·σ (standard frame: Q = Pauli Z, n₀ = e_z). Three measurement times t1 < t2 < t3; propagation between the times by elements of a group G ⊂ SU(2): V1 (t1→t2), V2 (t2→t3). Heisenberg observables:
+  Q1 = Q, Q2 = V1† Q V1, Q3 = (V2V1)† Q (V2V1). Their Bloch directions n1 = n₀, n2, n3 lie in the orbit of n₀ under the SO(3) image of G; **n2 and n3 can be chosen freely and independently, because V1 and V2 are independent.**
+- **Lüders correlator** for dichotomic projective measurements (standard convention, cf. Fritz 2010; Budroni–Emary arXiv:1309.3678):
+  C_ij = Σ_{a,b=±1} a·b · P(a at t_j, b at t_i) = (1/2) tr(ρ {Q_i, Q_j}).
+- **Witness:** K3 = C21 + C32 − C31; macrorealist bound K3 ≤ 1.
 
 ---
 
 # THEOREM A (Pauli-aligned-Clifford-Spezialfall)
 
-Sei **G eine Untergruppe der Single-Qubit-Clifford-Gruppe im Rahmen von Q** — d. h. G normalisiert die von Q aufgespannte Pauli-Gruppe, äquivalent: Q liegt im signierten Pauli-Achsen-Raster ±{X, Y, Z} und das SO(3)-Bild von G permutiert dieses Raster. Dann gilt für den dichotomen Lüders-LGI-Zeugen mit festem Q = Pauli-Z und Propagatoren aus G:
+Let **G be a subgroup of the single-qubit Clifford group in the frame of Q** — i.e. G normalizes the Pauli group spanned by Q, equivalently: Q lies in the signed Pauli axis grid ±{X, Y, Z} and the SO(3) image of G permutes that grid. Then, for the dichotomic Lüders LGI witness with fixed Q = Pauli Z and propagators from G:
 
-**K3 ≤ 1 für ALLE ρ.** Der Zeuge ist strukturell blind, zustandsunabhängig.
+**K3 ≤ 1 for ALL ρ.** The witness is structurally blind, independently of the state.
 
-> **⚠ WARNHINWEIS (Kern der Reparatur 2026-07-08):** Das **reale** k=4-Braid-Bild von SU(2)_k=4 erfüllt diese Voraussetzung **im Fusions-Z-Rahmen NICHT.** Das SO(3)-Bild von σ₁ ist dort eine projektive **3-fach-Drehung um z** (cos θ = −1/2), also ist z eine 3-fach-Achse der tetraedrischen Gruppe T, keine Pauli-2-fach-Achse; Orbit(Z) besteht aus **4 Tetraeder-Richtungen** (z + 3 Richtungen mit z-Komponente −1/3, paarweise Bloch-Dots exakt −1/3), NICHT aus ±{X, Y, Z}. Insbesondere σ₂† Z σ₂ = Bloch(−√2/3, −√6/3, −1/3) ist **kein** ±Pauli. Die k=4-Gruppe ist zwar zu einer Clifford-Untergruppe konjugiert, aber die Konjugation fixiert Z nicht — Lemma 1 bricht. **Die k=4-Blindheit gilt trotzdem, aber über die Orbit-Gram-Geometrie (THEOREM B), nicht über THEOREM A.** (Erstfassung dieser Note behauptete fälschlich k=4 ⊂ Clifford im Z-Rahmen; siehe Ehrlichkeits-Block.)
+> **⚠ WARNING (core of the 2026-07-08 repair):** The **real** k=4 braid image of SU(2)_k=4 does **NOT** satisfy this hypothesis **in the fusion-Z frame.** There the SO(3) image of σ₁ is a projective **3-fold rotation about z** (cos θ = −1/2), so z is a 3-fold axis of the tetrahedral group T, not a Pauli 2-fold axis; orbit(Z) consists of **4 tetrahedron directions** (z + 3 directions with z component −1/3, pairwise Bloch dots exactly −1/3), NOT of ±{X, Y, Z}. In particular σ₂† Z σ₂ = Bloch(−√2/3, −√6/3, −1/3) is **not** a ±Pauli. The k=4 group is indeed conjugate to a Clifford subgroup, but the conjugation does not fix Z — Lemma 1 breaks. **The k=4 blindness nevertheless holds, but via the orbit Gram geometry (THEOREM B), not via THEOREM A.** (The first version of this note wrongly claimed k=4 ⊂ Clifford in the Z frame; see the honesty block.)
 
-## Lemma A1 (Clifford-Konjugation hält Z im signierten Pauli-Orbit)
+## Lemma A1 (Clifford conjugation keeps Z in the signed Pauli orbit)
 
-**Behauptung:** U Clifford (im Q-Rahmen) ⇒ U†ZU = ±P für ein P ∈ {X, Y, Z}.
+**Claim:** U Clifford (in the Q frame) ⇒ U†ZU = ±P for some P ∈ {X, Y, Z}.
 
-**Beweis:** Die Clifford-Gruppe ist per Definition der Normalisator der Pauli-Gruppe: U†ZU liegt in der Pauli-Gruppe, also U†ZU = ω·P' mit ω Phase, P' ∈ {I, X, Y, Z}. Hermitezität von U†ZU erzwingt ω = ±1; Spurtreue der Konjugation (tr(U†ZU) = tr Z = 0) schließt P' = I aus. Also U†ZU = ±P, P ∈ {X, Y, Z}. Da G Untergruppe ist, sind V1 und V2V1 beide in G ⊂ Clifford ⇒ **alle drei Heisenberg-Observablen Z1, Z2, Z3 sind signierte Paulis.** ∎
+**Proof:** By definition the Clifford group is the normalizer of the Pauli group: U†ZU lies in the Pauli group, hence U†ZU = ω·P' with a phase ω, P' ∈ {I, X, Y, Z}. Hermiticity of U†ZU forces ω = ±1; tracelessness under conjugation (tr(U†ZU) = tr Z = 0) rules out P' = I. Hence U†ZU = ±P, P ∈ {X, Y, Z}. Since G is a subgroup, V1 and V2V1 both lie in G ⊂ Clifford ⇒ **all three Heisenberg observables Z1, Z2, Z3 are signed Paulis.** ∎
 
-**Spot-Check 1:** Alle 24 Elemente von 2T (8 Lipschitz- + 16 Hurwitz-Einheitsquaternionen → SU(2)) explizit aufgebaut, Unitarität + det=1 + Gruppenabschluss (24×24 Produkte) verifiziert; U†ZU ∈ {±X, ±Y, ±Z} für **24/24** Elemente, Verteilung gleichmäßig 4 pro Ziel. **Hinweis:** 2T tritt hier als **abstrakte** Pauli-aligned-Clifford-Untergruppe auf (Achsen im Pauli-Raster) — das ist eine ANDERE Einbettung als das reale k=4-Fusions-Bild (siehe Warnhinweis / THEOREM B). Siehe Rohausgabe CHECK 1.
+**Spot check 1:** All 24 elements of 2T (8 Lipschitz + 16 Hurwitz unit quaternions → SU(2)) built explicitly, unitarity + det=1 + group closure (24×24 products) verified; U†ZU ∈ {±X, ±Y, ±Z} for **24/24** elements, distribution uniform at 4 per target. **Note:** 2T appears here as an **abstract** Pauli-aligned Clifford subgroup (axes in the Pauli grid) — that is a DIFFERENT embedding from the real k=4 fusion image (see the warning / THEOREM B). See raw output CHECK 1.
 
-## Lemma A2 (Lüders-Korrelatoren sind diskret und ρ-unabhängig)
+## Lemma A2 (Lüders correlators are discrete and ρ-independent)
 
-**Behauptung:** Für signierte Paulis A, B gilt (1/2){A, B} = ±I falls B = ±A, sonst 0. Folglich ist C_ij = (1/2) tr(ρ {Z_i, Z_j}) entweder ±1 (**ρ-unabhängig**) oder 0.
+**Claim:** For signed Paulis A, B one has (1/2){A, B} = ±I if B = ±A, and 0 otherwise. Consequently C_ij = (1/2) tr(ρ {Z_i, Z_j}) is either ±1 (**ρ-independent**) or 0.
 
-**Beweis:** In d=2 gibt es für zwei signierte Paulis nur zwei Fälle: (i) gleiche Pauli-Achse, B = ±A ⇒ (1/2){A, B} = ±A² = ±I; (ii) verschiedene Achsen ⇒ die Paulis antikommutieren, {A, B} = 0. Einsetzen: C_ij = ±tr(ρ) = ±1 bzw. C_ij = 0 — ρ fällt vollständig heraus. ∎
+**Proof:** In d=2 there are only two cases for two signed Paulis: (i) same Pauli axis, B = ±A ⇒ (1/2){A, B} = ±A² = ±I; (ii) different axes ⇒ the Paulis anticommute, {A, B} = 0. Substituting: C_ij = ±tr(ρ) = ±1 resp. C_ij = 0 — ρ drops out completely. ∎
 
-**Spot-Check 2:** Alle 36 signierten Pauli-Paare: 12× (1/2){A,B} = ±I (gleiche Achse), 24× = 0 (verschiedene Achse), Toleranz 1e-12. Korrelator über 206 Zufallszustände: maximale Spannweite 4.44e-16 (ρ-unabhängig), alle Werte in {−1, 0, +1}. Siehe Rohausgabe CHECK 2.
+**Spot check 2:** All 36 signed Pauli pairs: 12× (1/2){A,B} = ±I (same axis), 24× = 0 (different axis), tolerance 1e-12. Correlator over 206 random states: maximal spread 4.44e-16 (ρ-independent), all values in {−1, 0, +1}. See raw output CHECK 2.
 
-## Lemma A3 (Vorzeichen-Konsistenz: alle Fälle enden bei K3 ≤ 1)
+## Lemma A3 (sign consistency: all cases end at K3 ≤ 1)
 
-Schreibe Z2 = s2·P2, Z3 = s3·P3 (Lemma A1). Aus Lemma A2 folgt exakt:
-C21 = s2·δ(P2=Z), C32 = s2·s3·δ(P3=P2), C31 = s3·δ(P3=Z). Vollständige Fall-Liste (36 Kombinationen):
+Write Z2 = s2·P2, Z3 = s3·P3 (Lemma A1). From Lemma A2 it follows exactly that:
+C21 = s2·δ(P2=Z), C32 = s2·s3·δ(P3=P2), C31 = s3·δ(P3=Z). Complete case list (36 combinations):
 
-| Fall | Bedingung | C21 | C32 | C31 | K3 = C21+C32−C31 | # |
+| Case | Condition | C21 | C32 | C31 | K3 = C21+C32−C31 | # |
 |---|---|---|---|---|---|---|
 | A | P2 = Z, P3 = Z | e1 := s2 | e1e2 (e2 := s3s2) | e1e2·e1 = s3 | e1 + e2 − e1e2 ∈ {1, −3} | 4 |
 | B | P2 = Z, P3 ≠ Z | ±1 | 0 | 0 | ±1 | 8 |
-| C | P2 ≠ Z, P3 = P2 | 0 | ±1 | 0 (da P3 = P2 ≠ Z) | ±1 | 8 |
+| C | P2 ≠ Z, P3 = P2 | 0 | ±1 | 0 (since P3 = P2 ≠ Z) | ±1 | 8 |
 | D | P2 ≠ Z, P3 = Z | 0 | 0 | ±1 | ∓1 | 8 |
 | E | P2 ≠ Z, P3 ∉ {Z, P2} | 0 | 0 | 0 | 0 | 8 |
 
-**Fall A ausgeschrieben** (der einzige mit drei nichttrivialen Korrelatoren): Z2 = e1·Z, Z3 = e2·Z2 ⇒ Z3 = e1e2·Z ⇒ C31 = C21·C32, also K3 = e1 + e2 − e1e2. Werte: (+,+) → 1, (+,−) → 1, (−,+) → 1, (−,−) → −3. Maximum 1.
-**Fälle B–E:** Sobald mindestens ein Korrelator 0 ist, propagieren die (Anti-)Kommutations-Relationen und höchstens ein Term von K3 ist ±1. **Keine der 36 Kombinationen erreicht K3 > 1.** ∎
+**Case A written out** (the only one with three nontrivial correlators): Z2 = e1·Z, Z3 = e2·Z2 ⇒ Z3 = e1e2·Z ⇒ C31 = C21·C32, hence K3 = e1 + e2 − e1e2. Values: (+,+) → 1, (+,−) → 1, (−,+) → 1, (−,−) → −3. Maximum 1.
+**Cases B–E:** As soon as at least one correlator is 0, the (anti)commutation relations propagate and at most one term of K3 is ±1. **None of the 36 combinations reaches K3 > 1.** ∎
 
-**Spot-Check 3:** Alle 36 Kombinationen: Fall-Formel gegen Brute-Force über 56 Zufalls-ρ, Abweichung < 1e-10; K3-Wertemengen pro Fall exakt wie in der Tabelle; max K3 = 1. Siehe Rohausgabe CHECK 3.
+**Spot check 3:** All 36 combinations: case formula against brute force over 56 random ρ, deviation < 1e-10; K3 value sets per case exactly as in the table; max K3 = 1. See raw output CHECK 3.
 
-## Beweis von Theorem A
+## Proof of Theorem A
 
-Lemma A1 (mit Untergruppen-Abschluss: V1, V2V1 ∈ G) ⇒ Z1, Z2, Z3 signierte Paulis. Lemma A2 ⇒ jeder der drei Lüders-Korrelatoren liegt ρ-unabhängig in {−1, 0, +1}. Lemma A3 ⇒ jede der 36 Konfigurationen ergibt K3 ≤ 1. Da die Korrelatoren ρ-unabhängig sind, gilt die Schranke für **alle** ρ. ∎
+Lemma A1 (with subgroup closure: V1, V2V1 ∈ G) ⇒ Z1, Z2, Z3 are signed Paulis. Lemma A2 ⇒ each of the three Lüders correlators lies, independently of ρ, in {−1, 0, +1}. Lemma A3 ⇒ each of the 36 configurations gives K3 ≤ 1. Since the correlators are ρ-independent, the bound holds for **all** ρ. ∎
 
-**Spot-Check 4 (end-zu-end):** Alle 576 Propagator-Paare (V1, V2) ∈ 2T × 2T, je 14 Zufalls-ρ: Z2, Z3 stets signierte Paulis; **max K3 = 1.000000000000** — Schranke exakt erreicht (z. B. V1 = V2 = I), nie überschritten. Siehe Rohausgabe CHECK 4.
+**Spot check 4 (end to end):** All 576 propagator pairs (V1, V2) ∈ 2T × 2T, 14 random ρ each: Z2, Z3 always signed Paulis; **max K3 = 1.000000000000** — the bound is attained exactly (e.g. V1 = V2 = I), never exceeded. See raw output CHECK 4.
 
-**Korollar A-a (k=2, abstrakt Pauli-aligned):** Das Braid-Bild bei k=2 ist binär-oktaedrisch 2O; **als abstrakte Gruppe** ist 2O eine Pauli-aligned-Clifford-Untergruppe (SO(3)-Bild = volle Oktaedergruppe, permutiert ±{X,Y,Z}) — Theorem A gilt wörtlich. **Spot-Check 1b:** alle 48 Elemente von 2O konjugieren Z auf ±Pauli (48/48), Gruppenabschluss 48×48 verifiziert. (Ob das reale k=2-Fusions-Bild diese Achsen-Ausrichtung trägt, ist eine Konventionsfrage; THEOREM B G2 rechnet den k=2-Orbit direkt und findet ebenfalls K3max = 1.)
+**Corollary A-a (k=2, abstractly Pauli-aligned):** The braid image at k=2 is binary octahedral 2O; **as an abstract group** 2O is a Pauli-aligned Clifford subgroup (SO(3) image = full octahedral group, permutes ±{X,Y,Z}) — Theorem A applies verbatim. **Spot check 1b:** all 48 elements of 2O conjugate Z to a ±Pauli (48/48), group closure 48×48 verified. (Whether the real k=2 fusion image carries this axis alignment is a matter of convention; THEOREM B G2 computes the k=2 orbit directly and likewise finds K3max = 1.)
 
-**Spot-Check 5 (Kontrast, Nicht-Clifford):** Nicht-Clifford-Präzession U = exp(−iπX/6) verletzt Lemma A1 (U†ZU kein ±Pauli) und liefert K3 = 1.500000000000 für alle getesteten ρ = Lüders-Schranke 3/2 (Budroni–Emary). Siehe Rohausgabe CHECK 5.
+**Spot check 5 (contrast, non-Clifford):** The non-Clifford precession U = exp(−iπX/6) violates Lemma A1 (U†ZU is not a ±Pauli) and yields K3 = 1.500000000000 for all ρ tested = the Lüders bound 3/2 (Budroni–Emary). See raw output CHECK 5.
 
 ---
 
-# THEOREM B (Orbit-Gram-Geometrie — deckt das reale k=4)
+# THEOREM B (orbit Gram geometry — covers the real k=4)
 
-Sei G ⊂ SU(2) beliebig und Q = n₀·σ fest. Dann sind die Lüders-Korrelatoren **Bloch-Skalarprodukte der Heisenberg-Richtungen und ρ-unabhängig:**
+Let G ⊂ SU(2) be arbitrary and Q = n₀·σ fixed. Then the Lüders correlators are **Bloch inner products of the Heisenberg directions, and ρ-independent:**
 
-**C_ij = n_i · n_j für JEDES ρ**, wobei n_i ∈ Orbit(n₀) unter dem SO(3)-Bild von G, mit n1 = n₀ fest und n2, n3 unabhängig frei (V1, V2 unabhängig).
+**C_ij = n_i · n_j for EVERY ρ**, where n_i ∈ orbit(n₀) under the SO(3) image of G, with n1 = n₀ fixed and n2, n3 free and independent (V1, V2 independent).
 
-**Beweis:** Für Single-Qubit-Dichotome ist {n·σ, m·σ} = 2(n·m)·I (Standard-Pauli-Algebra), also C_ij = (1/2) tr(ρ · 2(n_i·n_j) I) = (n_i·n_j)·tr(ρ) = n_i·n_j — ρ fällt exakt heraus (kein Clifford, kein Pauli-Raster nötig). ∎
+**Proof:** For single-qubit dichotomics {n·σ, m·σ} = 2(n·m)·I (standard Pauli algebra), hence C_ij = (1/2) tr(ρ · 2(n_i·n_j) I) = (n_i·n_j)·tr(ρ) = n_i·n_j — ρ drops out exactly (no Clifford, no Pauli grid needed). ∎
 
-**Folge:** K3max = max über Orbit-Paare (n2, n3) von (n₀·n2 + n2·n3 − n₀·n3). Blindheit (K3max = 1) ⇔ die Q-Achse n₀ ist mit einer Symmetrieachse des Orbits **ausgerichtet**; Endlichkeit oder Clifford-Eigenschaft allein genügen NICHT (siehe Anwendung iv).
+**Consequence:** K3max = max over orbit pairs (n2, n3) of (n₀·n2 + n2·n3 − n₀·n3). Blindness (K3max = 1) ⇔ the Q axis n₀ is **aligned** with a symmetry axis of the orbit; finiteness or the Clifford property alone are NOT sufficient (see application iv).
 
-**Anwendungen (exakte Werte, `spot_checks_gram.py`; Referenz A-p07-Reimpl reproduziert):**
+**Applications (exact values, `spot_checks_gram.py`; reproduces the A-p07 reference reimplementation):**
 
-| # | System | Orbit | Bloch-Dots (offdiag) | K3max | Deutung |
+| # | System | Orbit | Bloch dots (offdiag) | K3max | Reading |
 |---|---|---|---|---|---|
-| (i) | **k=4 / Fusions-Z** | 4 Tetraeder-Richtungen | {−1/3} | **1 exakt** | **blind** (Alignment: z = 3-fach-Achse) |
-| (ii) | k=2 (O, z = 4-fach-Achse) | 6 (±{x,y,z}) | {0, ±1} | 1 exakt | blind |
-| (iii) | k=8 (I) | 12 Ikosaeder-Ecken | {±1, ±1/√5} | 3/√5 ≈ 1.3416 | **sieht** (> 1) |
-| (iv) | **Alignment-Korollar:** Oktaeder-Gruppe, gedrehtes Q=(1,1,0)/√2 | 12 Kantenmitten | {0, ±½, ±1} | **3/2 exakt** | **nicht blind** |
+| (i) | **k=4 / fusion Z** | 4 tetrahedron directions | {−1/3} | **1 exact** | **blind** (alignment: z = 3-fold axis) |
+| (ii) | k=2 (O, z = 4-fold axis) | 6 (±{x,y,z}) | {0, ±1} | 1 exact | blind |
+| (iii) | k=8 (I) | 12 icosahedron vertices | {±1, ±1/√5} | 3/√5 ≈ 1.3416 | **sees** (> 1) |
+| (iv) | **alignment corollary:** octahedral group, rotated Q=(1,1,0)/√2 | 12 edge midpoints | {0, ±½, ±1} | **3/2 exact** | **not blind** |
 
-**Fallliste zu (i)** (Tetraeder-Gram, Dot = 1 bei gleichem Index, sonst −1/3): über alle 4³ = 64 Orbit-Tripel ist max(d12 + d23 − d13) = 1 exakt (erreicht z. B. n1 = n2, n3 ≠ n1: 1 − 1/3 + 1/3 = 1). **Spot-Check G1/G2** (unten): reales k=4-Bild → 4 Tetraeder-Richtungen, alle Paar-Dots −1/3, σ₂†Zσ₂ kein ±Pauli; K3max = 1.
+**Case list for (i)** (tetrahedron Gram, dot = 1 for equal index, otherwise −1/3): over all 4³ = 64 orbit triples, max(d12 + d23 − d13) = 1 exactly (attained e.g. at n1 = n2, n3 ≠ n1: 1 − 1/3 + 1/3 = 1). **Spot check G1/G2** (below): real k=4 image → 4 tetrahedron directions, all pair dots −1/3, σ₂†Zσ₂ not a ±Pauli; K3max = 1.
 
-**Anwendung (iv) — Kern der zweiten Reparatur:** Dieselbe abstrakte Gruppe (chirale Oktaedergruppe O, 24 Elemente; als 2O sogar **volles Clifford-Bild**), aber mit um 45° **gedrehter** Q-Achse (1,1,0)/√2 liefert K3max = **3/2 exakt** — die Lüders-Schranke, weit über 1. **„Endliche Gruppe ⇒ blind" ist als Slogan FALSCH.** Blindheit ist Eigenschaft des **ausgerichteten Paars (Gruppe, Q-Achse)**, nicht der Endlichkeit und nicht der Clifford-Eigenschaft per se. **Spot-Check G4** (Gram) + **G5** (operationale Quanten-Gegenprobe mit zwei echten SU(2)-Qubit-Unitaries): K3 = 3/2, ρ-unabhängig, == Gram-Formel.
+**Application (iv) — core of the second repair:** The same abstract group (chiral octahedral group O, 24 elements; as 2O even the **full Clifford image**), but with the Q axis **rotated** by 45° to (1,1,0)/√2, yields K3max = **3/2 exactly** — the Lüders bound, far above 1. **As a slogan, "finite group ⇒ blind" is WRONG.** Blindness is a property of the **aligned pair (group, Q axis)**, not of finiteness and not of the Clifford property per se. **Spot check G4** (Gram) + **G5** (operational quantum cross-check with two real SU(2) qubit unitaries): K3 = 3/2, ρ-independent, == the Gram formula.
 
-**Scope-Hinweis zu (iii):** Im **festen Z-Rahmen** sieht der Zeuge bei k=8 K3max = 3/√5 ≈ 1.3416. Der Referenzwert K3opt = 1.427 = 2cos72° − cos144° stammt aus dem **max-Q-Protokoll** (Q-Richtung ⊥ zur 5-fach-Achse optimiert); im festen Z-Rahmen liegt keine 5-fach-Achse ⊥ z, daher dort unerreichbar. Kein Widerspruch, sondern Protokoll-Scope-Unterschied — konsistent mit Anwendung (iv): auch bei k=8 hängt K3max an der Q-Achsen-Ausrichtung.
-
----
-
-## Korollare (übergreifend)
-
-**(a) Dichte Braid-Bilder (Kontrast).** Für k=3 und k≥5 ist das Braid-Bild dicht in der projektiven Unitärgruppe (Freedman–Larsen–Wang-Universalität; Endlichkeits-/Dichtheits-Klassifikation Jones 1986, Tuba–Wenzl math/9912013 — fremde Resultate). Dann ist der Orbit von Q dicht auf der Bloch-Sphäre, C_ij wird kontinuierlich, und K3 kann bis zur Lüders-Schranke **3/2** steigen (Budroni–Emary, arXiv:1309.3678). **Spot-Check 5:** U = exp(−iπX/6) liefert K3 = 3/2.
-
-**(b) Treiber ist das ALIGNMENT, nicht Clifford/Endlichkeit (Schärfung).** Der Zeuge ist genau dann blind, wenn die feste Q-Achse mit einer hinreichend hohen Symmetrieachse des G-Orbits ausgerichtet ist, sodass die Orbit-Gram-Struktur max(d12+d23−d13) = 1 erzwingt (k=4: 3-fach-Achse → Tetraeder-Gram {1,−1/3}; k=2: 4-fach-Achse → {0,±1}). Endlichkeit genügt NICHT (k=8 endlich, aber K3max = 3/√5 > 1); Clifford-Eigenschaft genügt NICHT (Oktaeder-Gruppe mit gedrehtem Q: K3max = 3/2, Anwendung iv). Der Pauli-aligned-Clifford-Fall (Theorem A) ist der **Spezialfall**, in dem die Ausrichtung automatisch das ±Pauli-Raster trifft.
-
-**(c) Verbindung zum Magic-Befund (korrigiert).** Die Referenz misst bei k=4 Magic M₂ = 0.5585 (Lauf r1, deponiert via `p5a_r1_engine.py`) bei gleichzeitig K3 = 1.000 (inert). Das Theorem erklärt die Dissoziation strukturell: der Zeuge sieht ausschließlich die **Orbit-Gram-Struktur** der Heisenberg-Richtungen — bei k=4 den Tetraeder-Gram mit Dots {1, −1/3} (NICHT ein „diskretes ±Pauli-Raster {0,±1}"; das gilt nur bei k=2), was K3 auf 1 deckelt — nicht die Magic-Ressource. Blindheit trotz M₂ = 0.5585 ist also zustandsunabhängige Alignment-Struktur — **dieser Zeuge ist blind für die k=4-Magic**; über andere Zeugen oder andere Q-Achsen sagt das nichts.
-
-## Abgrenzung (ehrlich): Gottesman–Knill ist NICHT das Argument
-
-Gottesman–Knill liefert klassische Simulierbarkeit von Clifford-Schaltkreisen auf Stabilisator-Zuständen — eine Aussage über Rechenkomplexität, keine über temporale Korrelationsschranken. Unser Argument benutzt an keiner Stelle Stabilisator-Simulierbarkeit; es benutzt die **Orbit-Gram-Geometrie** der Heisenberg-Richtungen (Theorem B) bzw., im Spezialfall, die Pauli-Orbit-Diskretheit (Theorem A). Eine Brücke „simulierbar ⇒ LGI-inert" müsste separat gebaut werden und wird hier weder gebraucht noch behauptet.
+**Scope note on (iii):** In the **fixed Z frame** the witness sees K3max = 3/√5 ≈ 1.3416 at k=8. The reference value K3opt = 1.427 = 2cos72° − cos144° comes from the **max-Q protocol** (Q direction optimized ⊥ to the 5-fold axis); in the fixed Z frame no 5-fold axis lies ⊥ z, so it is unreachable there. Not a contradiction but a difference of protocol scope — consistent with application (iv): at k=8 too, K3max depends on the alignment of the Q axis.
 
 ---
 
-## Ehrlichkeits-Block (Historie der Reparatur, transparent)
+## Corollaries (across both theorems)
 
-- **Erstfassung (2026-07-07):** behauptete das Theorem allein über „G ⊂ Clifford" und nannte als Beispiel „das endliche k=4-Braid-Bild 2T ⊂ Clifford im Z-Rahmen". Korollar formulierte Blindheit über ein „diskretes ±Pauli-Raster ⇒ Korrelatoren {0,±1}".
-- **Zwei unabhängige Refuter-Pässe (2026-07-08)** fingen zwei Fehler (Fehlerklasse **R6.2** — selbstbewusst-plausibler, aber faktisch falscher Zwischenschritt):
-  1. Das **reale** k=4-Fusions-Z-Bild ist KEINE Clifford-Untergruppe im Z-Rahmen: σ₁ wirkt projektiv als 3-fach-Drehung um z, Orbit(Z) = 4 Tetraeder-Richtungen mit Dots −1/3, σ₂†Zσ₂ kein ±Pauli. Korrelatoren sind {1, −1/3}, nicht {0, ±1}. (Refuter B1, `find_counterexample.py`/`ergebnis_b1.json`.)
-  2. **Misalignment:** dieselbe abstrakte 2T/2O-Gruppe mit gedrehtem Q = (X+Y)/√2 liefert K3max = 3/2 — „endliche Gruppe ⇒ blind" bzw. „Treiber = Clifford" ist falsch nuanciert; Treiber ist das **Alignment**. (Refuter A-p07-Reimpl, `reimpl_ergebnis.json['gram_checks']`.)
-- **Reparatur = dieses Update (2026-07-08):** Theorem A mit expliziter Pauli-aligned-Voraussetzung + Warnhinweis; neues Theorem B (Orbit-Gram) deckt das reale k=4 korrekt; Korollare (b)/(c) auf Alignment umgestellt; Spot-Checks `spot_checks_gram.py` (G1–G5), reproduziert die unabhängige A-p07-Reimpl (tet=1, octa=1, ico=3/√5, octa_misaligned=3/2) bis auf Maschinengenauigkeit. `spot_checks.py` (Theorem A) blieb unverändert und grün.
+**(a) Dense braid images (contrast).** For k=3 and k≥5 the braid image is dense in the projective unitary group (Freedman–Larsen–Wang universality; finiteness/density classification Jones 1986, Tuba–Wenzl math/9912013 — results by others). The orbit of Q is then dense on the Bloch sphere, C_ij becomes continuous, and K3 can rise to the Lüders bound **3/2** (Budroni–Emary, arXiv:1309.3678). **Spot check 5:** U = exp(−iπX/6) yields K3 = 3/2.
+
+**(b) The driver is the ALIGNMENT, not Clifford/finiteness (sharpened).** The witness is blind exactly when the fixed Q axis is aligned with a symmetry axis of the G orbit whose Gram structure forces max(d12+d23−d13) = 1 (k=4: 3-fold axis → tetrahedron Gram {1,−1/3}; k=2: 4-fold axis → {0,±1}). Finiteness is NOT sufficient (k=8 is finite, yet K3max = 3/√5 > 1); the Clifford property is NOT sufficient (octahedral group with rotated Q: K3max = 3/2, application iv). The Pauli-aligned Clifford case (Theorem A) is the **special case** in which the alignment automatically hits the ±Pauli grid.
+
+**(c) Connection to the magic finding (corrected).** At k=4 the reference measures magic M₂ = 0.5585 (run r1, deposited via `p5a_r1_engine.py`) while K3 = 1.000 (inert). The theorem explains the dissociation structurally: the witness sees only the **orbit Gram structure** of the Heisenberg directions — at k=4 the tetrahedron Gram with dots {1, −1/3} (NOT a "discrete ±Pauli grid {0,±1}"; that holds only at k=2), which caps K3 at 1 — not the magic resource. Blindness despite M₂ = 0.5585 is therefore state-independent alignment structure — **this witness is blind to the k=4 magic**; it says nothing about other witnesses or other Q axes.
+
+## Delimitation (honest): Gottesman–Knill is NOT the argument
+
+Gottesman–Knill gives classical simulability of Clifford circuits on stabilizer states — a statement about computational complexity, not about temporal correlation bounds. Our argument nowhere uses stabilizer simulability; it uses the **orbit Gram geometry** of the Heisenberg directions (Theorem B) and, in the special case, the discreteness of the Pauli orbit (Theorem A). A bridge "simulable ⇒ LGI-inert" would have to be built separately, and is neither needed nor claimed here.
 
 ---
 
-## Verifikations-Status
+## Honesty block (history of the repair, transparent)
 
-| Baustein | Status |
+- **First version (2026-07-07):** claimed the theorem via "G ⊂ Clifford" alone and gave as an example "the finite k=4 braid image 2T ⊂ Clifford in the Z frame". The corollary phrased blindness via a "discrete ±Pauli grid ⇒ correlators {0,±1}".
+- **Two independent refuter passes (2026-07-08)** caught two errors (error class **R6.2** — a confidently plausible but factually wrong intermediate step):
+  1. The **real** k=4 fusion-Z image is NOT a Clifford subgroup in the Z frame: σ₁ acts projectively as a 3-fold rotation about z, orbit(Z) = 4 tetrahedron directions with dots −1/3, σ₂†Zσ₂ not a ±Pauli. The correlators are {1, −1/3}, not {0, ±1}. (Refuter B1, `find_counterexample.py`/`ergebnis_b1.json`.)
+  2. **Misalignment:** the same abstract 2T/2O group with a rotated Q = (X+Y)/√2 yields K3max = 3/2 — "finite group ⇒ blind" resp. "the driver is Clifford" is wrongly nuanced; the driver is the **alignment**. (Refuter A-p07 reimplementation, `reimpl_ergebnis.json['gram_checks']`.)
+- **Repair = this update (2026-07-08):** Theorem A with an explicit Pauli-aligned hypothesis + warning; a new Theorem B (orbit Gram) covers the real k=4 correctly; corollaries (b)/(c) recast onto alignment; spot checks `spot_checks_gram.py` (G1–G5), reproducing the independent A-p07 reimplementation (tet=1, octa=1, ico=3/√5, octa_misaligned=3/2) to machine precision. `spot_checks.py` (Theorem A) remained unchanged and green.
+
+---
+
+## Verification status
+
+| Component | Status |
 |---|---|
-| Theorem A · Lemma A1 (24/24 Elemente 2T abstrakt; Gruppenabschluss) | verifiziert (CHECK 1) |
-| Theorem A · Korollar A-a (48/48 Elemente 2O abstrakt) | verifiziert (CHECK 1b) |
-| Theorem A · Lemma A2 (36/36 Pauli-Paare; ρ-Spannweite 4.44e-16) | verifiziert (CHECK 2) |
-| Theorem A · Lemma A3 (36/36 Fälle, Formel == Brute-Force, 56 ρ) | verifiziert (CHECK 3) |
-| Theorem A end-zu-end (576 Paare × 14 ρ, max K3 = 1.0 exakt) | verifiziert (CHECK 4) |
-| Theorem A · Kontrast Nicht-Clifford (K3 = 3/2) | verifiziert (CHECK 5) |
-| **Theorem B · C_ij = n_i·n_j ρ-unabhängig (Eigenwert-Spread ≤ 6.7e-16)** | **verifiziert (CHECK G1/G5)** |
-| **Theorem B (i) k=4 Tetraeder-Orbit, Dots −1/3, K3max = 1 exakt** | **verifiziert (CHECK G1/G2), reales Braid-Bild** |
-| **Theorem B (ii) k=2 Oktaeder aligned, Dots {0,±1}, K3max = 1** | **verifiziert (CHECK G2)** |
-| **Theorem B (iii) k=8 Ikosaeder, Dots {±1,±1/√5}, K3max = 3/√5** | **verifiziert (CHECK G3), reales Braid-Bild** |
-| **Theorem B (iv) Alignment: Oktaeder-Gruppe, gedrehtes Q → K3max = 3/2** | **verifiziert (CHECK G4 Gram + G5 operational)** |
-| **Referenz A-p07-Reimpl (tet=1, octa=1, ico=3/√5, octa_mis=3/2) reproduziert** | **verifiziert (|diff| = 0 bzw. ≤ 1e-15)** |
-| Endlichkeit 2T/2O/2I als k=4/2/8-Braid-Bild | Literatur (Jones 1986; Tuba–Wenzl math/9912013), zugeschrieben |
-| Lüders-Schranke 3/2 | Literatur (Budroni–Emary 1309.3678), zugeschrieben |
-| K3opt(k=8, max-Q) = 1.427 · M₂(k=4) = 0.5585 | übernommen aus der Referenz (r1/r2), hier nicht neu gerechnet |
+| Theorem A · Lemma A1 (24/24 elements of 2T abstract; group closure) | verified (CHECK 1) |
+| Theorem A · Corollary A-a (48/48 elements of 2O abstract) | verified (CHECK 1b) |
+| Theorem A · Lemma A2 (36/36 Pauli pairs; ρ spread 4.44e-16) | verified (CHECK 2) |
+| Theorem A · Lemma A3 (36/36 cases, formula == brute force, 56 ρ) | verified (CHECK 3) |
+| Theorem A end to end (576 pairs × 14 ρ, max K3 = 1.0 exact) | verified (CHECK 4) |
+| Theorem A · contrast non-Clifford (K3 = 3/2) | verified (CHECK 5) |
+| **Theorem B · C_ij = n_i·n_j ρ-independent (eigenvalue spread ≤ 6.7e-16)** | **verified (CHECK G1/G5)** |
+| **Theorem B (i) k=4 tetrahedron orbit, dots −1/3, K3max = 1 exact** | **verified (CHECK G1/G2), real braid image** |
+| **Theorem B (ii) k=2 octahedron aligned, dots {0,±1}, K3max = 1** | **verified (CHECK G2)** |
+| **Theorem B (iii) k=8 icosahedron, dots {±1,±1/√5}, K3max = 3/√5** | **verified (CHECK G3), real braid image** |
+| **Theorem B (iv) alignment: octahedral group, rotated Q → K3max = 3/2** | **verified (CHECK G4 Gram + G5 operational)** |
+| **A-p07 reference reimplementation (tet=1, octa=1, ico=3/√5, octa_mis=3/2) reproduced** | **verified (|diff| = 0 resp. ≤ 1e-15)** |
+| Finiteness of 2T/2O/2I as the k=4/2/8 braid image | literature (Jones 1986; Tuba–Wenzl math/9912013), attributed |
+| Lüders bound 3/2 | literature (Budroni–Emary 1309.3678), attributed |
+| K3opt(k=8, max-Q) = 1.427 · M₂(k=4) = 0.5585 | taken from the reference (r1/r2), not recomputed here |
 
-**Scope-Grenzen (ehrlich):** Aussage gilt für den dichotomen Lüders-LGI-Zeugen K3 mit **festem** Q und Propagatoren aus einer Gruppe G ⊂ SU(2). Blindheit ist an das **Alignment** von Q mit einer Orbit-Symmetrieachse gebunden (Theorem B) — nicht an Endlichkeit oder Clifford per se; bei gedrehtem Q kann derselbe endliche/Clifford-G K3 = 3/2 erreichen. Keine Aussage über andere Messschemata (schwache/POVM-Auslese), andere Zeugen oder Multi-Qubit-Erweiterungen.
+**Scope limits (honest):** The statement holds for the dichotomic Lüders LGI witness K3 with **fixed** Q and propagators from a group G ⊂ SU(2). Blindness is tied to the **alignment** of Q with an orbit symmetry axis (Theorem B) — not to finiteness or Clifford per se; with a rotated Q the same finite/Clifford G can reach K3 = 3/2. No statement about other measurement schemes (weak/POVM readout), other witnesses, or multi-qubit extensions.
 
 ---
 
-## Rohausgaben Theorem A (spot_checks.py, seed=42, PYTHONIOENCODING=utf-8)
+**Note on the two raw-output blocks below.** They are the verbatim console log of the original
+verification runs (2026-07-07/08) and are reproduced unchanged, in the original German, as a record
+of those runs. The scripts were translated afterwards, so their present output is in English; the
+glossary below uses the scripts' own wording. `abgeschlossen` = closed (under multiplication) ·
+`Spannweite` = spread · `Lueders-Schranke` = Lüders bound · `Abw.` = deviation.
+
+## Raw output Theorem A (spot_checks.py, seed=42, PYTHONIOENCODING=utf-8)
 
 ```
 == CHECK 1 (Lemma 1): 2T konjugiert Z auf +-Pauli ==
@@ -177,7 +183,7 @@ K3 = 1.500000000000 fuer alle 26 rho (Spannweite 8.88e-16) = 3/2 = Lueders-Schra
 ALLE CHECKS BESTANDEN (seed=42, deterministisch)
 ```
 
-## Rohausgaben Theorem B (spot_checks_gram.py, deterministisch, PYTHONIOENCODING=utf-8, Reparatur 2026-07-08)
+## Raw output Theorem B (spot_checks_gram.py, deterministic, PYTHONIOENCODING=utf-8, repair 2026-07-08)
 
 ```
 == CHECK G1 (THEOREM B): Tetraeder-Orbit -- Dots -1/3, K3max = 1 (Blindheit) ==
