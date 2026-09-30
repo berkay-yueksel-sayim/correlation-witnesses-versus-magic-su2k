@@ -11,10 +11,11 @@ K3, and KCBS contextuality — are known to detect nonstabilizerness
 ("magic") in some settings. We report a worked example, a k-resolved
 nonstabilizerness map of the SU(2)_k anyon braid-representation family, in
 which a standard temporal witness is instead systematically blind: at k=4
-the three-time Leggett-Garg witness saturates its macrorealistic bound
-exactly (K3=1.000000 over every state, braid element, and measurement
-axis, in the equal-time-step protocol with V1=V2) while the single-qubit
-fusion channel carries near-maximal nonstabilizerness (M2=0.5585, 95% of
+the Leggett-Garg witness K3 (one of several three-time Leggett-Garg
+witnesses) exactly saturates its macrorealistic bound on the single-qubit
+(d=2) fusion space (K3=1.000000 over every state, braid element, and
+measurement axis) in the equal-time-step protocol with V1=V2, while the
+same fusion space carries near-maximal nonstabilizerness (M2=0.5585, 95% of
 the finite-dimensional ceiling log2(3/2)). We prove this blindness as a
 structural theorem: the witness depends only on the Bloch-sphere Gram
 geometry of the braid orbit, not on nonstabilizerness, and k=4 happens to
@@ -29,7 +30,7 @@ and an interface with KCBS contextuality at d=3.
 
 ## Contents
 
-This record is compiled from `main_v1.1.tex` (RevTeX 4-2). `p5a_fig1_dissociation_map.png`
+This record is compiled from `main_v1.3.tex` (RevTeX 4-2). `p5a_fig1_dissociation_map.png`
 is Fig. 1 of the paper.
 
 **Reproduction code and deposited data** (all deterministic, NumPy only
