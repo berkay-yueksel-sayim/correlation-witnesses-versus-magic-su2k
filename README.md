@@ -1,3 +1,4 @@
+[README.md](https://github.com/user-attachments/files/33892940/README.md)
 # Correlation Witnesses versus Magic: A k-Resolved Nonstabilizerness Map for SU(2)_k Anyon Fusion Spaces
 
 **Author:** Berkay Yüksel Sayim
@@ -5,6 +6,8 @@
 **DOI (all versions):** [10.5281/zenodo.21134454](https://doi.org/10.5281/zenodo.21134454)
 
 > **Important — licensing:** paper, figures and data under CC BY 4.0; source code under the Apache License, Version 2.0. Version 1.0 (source code under MIT) has been withdrawn. Please read [IMPORTANT.md](IMPORTANT.md).
+
+> **Correction notice (2026-10-10, also on the Zenodo record).** The abstract below (“two of them long-range”) and the file list below (item 2, “minimum ground-space stabilizer Rényi entropy certificate”, “Monte Carlo lower bound”) describe item (2) as a second long-range certificate. This description is too strong. The values reported for item (2) are Monte Carlo estimates of the total stabilizer Rényi entropy of individual sampled ground-space vectors on small lattices; they are neither a minimum over the ground space nor a lower bound. They show that these states are not stabilizer states. A value of the total magic at one fixed system size does not certify long-range magic, which is a property of families of states of growing size, defined by robustness under shallow local circuits (F. Wei and Z.-W. Liu, arXiv:2503.04566; D. A. Korbany et al., arXiv:2605.22424; Y. Zhang et al., arXiv:2605.15150). The long-range certificate of this work is item (1); that non-Abelian string-net ground states carry long-range magic is shown by Zhang et al. In the same section, the fraction of Pauli expectation values in {0, ±1}, measured for one ground-space state, is a nonstabilizerness indicator only; it is not a diagnostic proposed by Wei and Liu. No computed value changes. The paper text will be corrected in the next version.
 
 ## Abstract
 
