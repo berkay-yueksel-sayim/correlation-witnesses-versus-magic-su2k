@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/33892940/README.md)
 # Correlation Witnesses versus Magic: A k-Resolved Nonstabilizerness Map for SU(2)_k Anyon Fusion Spaces
 
 **Author:** Berkay Yüksel Sayim
